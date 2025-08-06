@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Image from "next/image";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -52,6 +53,76 @@ export default function About() {
             </div>
 
             <div className="max-w-6xl mx-auto space-y-12">
+              {/* Profile Image, Location and Introduction */}
+              <div className="animate-fade-in">
+                {/* Profile Image */}
+                <div className="mb-12">
+                  <div className="relative w-56 h-56 mx-auto mb-8 group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary-400 to-accent-400 dark:from-primary-500 dark:to-accent-500 rounded-full blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
+                    <Image
+                      src="/avatar.jpg"
+                      alt="Matias Gallardo"
+                      fill
+                      className="rounded-full object-cover shadow-2xl border-4 border-white/20 dark:border-gray-700/20 floating"
+                      priority
+                    />
+                    <div className="absolute inset-0 rounded-full border-4 border-transparent bg-gradient-to-r from-primary-400 to-accent-400 dark:from-primary-500 dark:to-accent-500 bg-clip-border opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  </div>
+                </div>
+
+                {/* Location */}
+                <div
+                  className="animate-slide-up mb-8"
+                  style={{ animationDelay: "0.2s" }}
+                >
+                  <div className="inline-flex items-center gap-2 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm px-6 py-3 rounded-full border border-white/20 dark:border-gray-700/20 shadow-lg">
+                    <span className="text-2xl">📍</span>
+                    <p className="text-lg text-gray-700 dark:text-gray-300 font-medium">
+                      Sydney, Australia
+                    </p>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      | Open to relocate
+                    </span>
+                  </div>
+                </div>
+
+                {/* Introduction */}
+                <div
+                  className="animate-slide-up mb-12"
+                  style={{ animationDelay: "0.4s" }}
+                >
+                  <div className="glass-card p-8 max-w-4xl mx-auto">
+                    <p className="text-xl text-gray-700 dark:text-gray-300 leading-relaxed">
+                      Full Stack Web Developer with a strong Back-End
+                      orientation. Graduate of Henry&apos;s intensive bootcamp
+                      and Technical Analyst in Information Systems (UTN FRT). I
+                      specialize in building scalable systems using modern
+                      technologies like{" "}
+                      <span className="text-gradient font-semibold">
+                        NestJS
+                      </span>
+                      ,{" "}
+                      <span className="text-gradient font-semibold">
+                        TypeScript
+                      </span>
+                      ,{" "}
+                      <span className="text-gradient font-semibold">
+                        PostgreSQL
+                      </span>
+                      ,{" "}
+                      <span className="text-gradient font-semibold">
+                        MongoDB
+                      </span>
+                      , and{" "}
+                      <span className="text-gradient font-semibold">
+                        Docker
+                      </span>
+                      .
+                    </p>
+                  </div>
+                </div>
+              </div>
+
               {/* Personal Story */}
               <div className="animate-slide-up">
                 <div className="glass-card p-8">
