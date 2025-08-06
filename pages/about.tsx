@@ -53,125 +53,77 @@ export default function About() {
             </div>
 
             <div className="max-w-6xl mx-auto space-y-12">
-              {/* Profile Image, Location and Introduction */}
+              {/* Profile Image, Location and My Story */}
               <div className="animate-fade-in">
-                {/* Profile Image */}
-                <div className="mb-12">
-                  <div className="relative w-56 h-56 mx-auto mb-8 group">
-                    <div className="absolute inset-0 bg-gradient-to-r from-primary-400 to-accent-400 dark:from-primary-500 dark:to-accent-500 rounded-full blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
-                    <Image
-                      src="/avatar.jpg"
-                      alt="Matias Gallardo"
-                      fill
-                      className="rounded-full object-cover shadow-2xl border-4 border-white/20 dark:border-gray-700/20 floating"
-                      priority
-                    />
-                    <div className="absolute inset-0 rounded-full border-4 border-transparent bg-gradient-to-r from-primary-400 to-accent-400 dark:from-primary-500 dark:to-accent-500 bg-clip-border opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  </div>
-                </div>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                  {/* Left side - Profile Image and Location */}
+                  <div className="lg:col-span-1 flex flex-col items-center">
+                    {/* Profile Image */}
+                    <div className="mb-8">
+                      <div className="relative w-56 h-56 mx-auto group">
+                        <div className="absolute inset-0 bg-gradient-to-r from-primary-400 to-accent-400 dark:from-primary-500 dark:to-accent-500 rounded-full blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
+                        <Image
+                          src="/avatar.jpg"
+                          alt="Matias Gallardo"
+                          fill
+                          className="rounded-full object-cover shadow-2xl border-4 border-white/20 dark:border-gray-700/20 floating"
+                          priority
+                        />
+                        <div className="absolute inset-0 rounded-full border-4 border-transparent bg-gradient-to-r from-primary-400 to-accent-400 dark:from-primary-500 dark:to-accent-500 bg-clip-border opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      </div>
+                    </div>
 
-                {/* Location */}
-                <div
-                  className="animate-slide-up mb-8"
-                  style={{ animationDelay: "0.2s" }}
-                >
-                  <div className="inline-flex items-center gap-2 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm px-6 py-3 rounded-full border border-white/20 dark:border-gray-700/20 shadow-lg">
-                    <span className="text-2xl">📍</span>
-                    <p className="text-lg text-gray-700 dark:text-gray-300 font-medium">
-                      Sydney, Australia
-                    </p>
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
-                      | Open to relocate
-                    </span>
+                    {/* Location */}
+                    <div
+                      className="animate-slide-up"
+                      style={{ animationDelay: "0.2s" }}
+                    >
+                      <div className="inline-flex items-center gap-2 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm px-6 py-3 rounded-full border border-white/20 dark:border-gray-700/20 shadow-lg">
+                        <span className="text-2xl">📍</span>
+                        <div className="flex flex-col">
+                          <p className="text-lg text-gray-700 dark:text-gray-300 font-medium">
+                            Sydney, Australia
+                          </p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
+                            Open to relocate
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
 
-                {/* Introduction */}
-                <div
-                  className="animate-slide-up mb-12"
-                  style={{ animationDelay: "0.4s" }}
-                >
-                  <div className="glass-card p-8 max-w-4xl mx-auto">
-                    <p className="text-xl text-gray-700 dark:text-gray-300 leading-relaxed">
-                      Full Stack Web Developer with a strong Back-End
-                      orientation. Graduate of Henry&apos;s intensive bootcamp
-                      and Technical Analyst in Information Systems (UTN FRT). I
-                      specialize in building scalable systems using modern
-                      technologies like{" "}
-                      <span className="text-gradient font-semibold">
-                        NestJS
-                      </span>
-                      ,{" "}
-                      <span className="text-gradient font-semibold">
-                        TypeScript
-                      </span>
-                      ,{" "}
-                      <span className="text-gradient font-semibold">
-                        PostgreSQL
-                      </span>
-                      ,{" "}
-                      <span className="text-gradient font-semibold">
-                        MongoDB
-                      </span>
-                      , and{" "}
-                      <span className="text-gradient font-semibold">
-                        Docker
-                      </span>
-                      .
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Personal Story */}
-              <div className="animate-slide-up">
-                <div className="glass-card p-8">
-                  <h2 className="text-3xl font-bold gradient-text mb-8">
-                    My Story
-                  </h2>
-                  <div className="prose prose-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                    <p className="mb-6 text-xl">
-                      I&apos;m a Full Stack Web Developer with a strong Back-End
-                      orientation, passionate about building scalable systems
-                      and delivering real-world solutions with measurable
-                      impact. I graduated from Henry&apos;s intensive bootcamp
-                      and hold a Technical Analyst degree in Information Systems
-                      from UTN FRT.
-                    </p>
-                    <p className="mb-6 text-xl">
-                      I specialize in modern technologies like{" "}
-                      <span className="text-gradient font-semibold">
-                        NestJS
-                      </span>
-                      ,{" "}
-                      <span className="text-gradient font-semibold">
-                        TypeScript
-                      </span>
-                      ,{" "}
-                      <span className="text-gradient font-semibold">
-                        PostgreSQL
-                      </span>
-                      ,{" "}
-                      <span className="text-gradient font-semibold">
-                        MongoDB
-                      </span>
-                      , and{" "}
-                      <span className="text-gradient font-semibold">
-                        Docker
-                      </span>
-                      . I follow best practices in validation, testing, and
-                      secure access control through RESTful APIs. My experience
-                      includes multi-tenant platforms, Stripe integrations,
-                      GitHub Actions, and cloud deployment across various
-                      platforms.
-                    </p>
-                    <p className="text-xl">
-                      I&apos;m passionate about clean architecture, automation,
-                      and creating solutions that make a real difference. When
-                      I&apos;m not coding, I enjoy contributing to the developer
-                      community and staying updated with the latest
-                      technologies.
-                    </p>
+                  {/* Right side - My Story */}
+                  <div className="lg:col-span-2">
+                    <div className="glass-card p-8 h-full">
+                      <h2 className="text-3xl font-bold gradient-text mb-8">
+                        My Story
+                      </h2>
+                      <div className="prose prose-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+                        <p className="mb-6 text-xl">
+                          I&apos;m a Full Stack Web Developer with a strong
+                          Back-End orientation, passionate about building
+                          scalable systems and delivering real-world solutions
+                          with measurable impact. I graduated from Henry&apos;s
+                          intensive bootcamp and hold a Technical Analyst degree
+                          in Information Systems from UTN FRT.
+                        </p>
+                        <p className="mb-6 text-xl">
+                          I specialize in modern technologies and follow best
+                          practices in validation, testing, and secure access
+                          control through RESTful APIs. My experience includes
+                          multi-tenant platforms, Stripe integrations, GitHub
+                          Actions, and cloud deployment across various
+                          platforms.
+                        </p>
+                        <p className="text-xl">
+                          I&apos;m passionate about clean architecture,
+                          automation, and creating solutions that make a real
+                          difference. When I&apos;m not coding, I enjoy
+                          contributing to the developer community and staying
+                          updated with the latest technologies.
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -208,19 +160,19 @@ export default function About() {
                     Languages
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="flex items-center justify-between p-6 bg-white/50 dark:bg-gray-800/50 rounded-xl">
-                      <span className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                    <div className="flex items-center justify-between p-6 bg-white/50 dark:bg-gray-800/50 rounded-xl hover:bg-white/70 dark:hover:bg-gray-800/70 hover:scale-105 transition-all duration-300 group">
+                      <span className="text-xl font-semibold text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300">
                         Spanish
                       </span>
-                      <span className="text-lg text-gray-600 dark:text-gray-400 bg-green-100 dark:bg-green-900/30 px-4 py-2 rounded-full">
+                      <span className="text-lg text-gray-600 dark:text-gray-400 bg-green-100 dark:bg-green-900/30 px-4 py-2 rounded-full group-hover:bg-green-200 dark:group-hover:bg-green-800/40 transition-colors duration-300">
                         Mother Tongue
                       </span>
                     </div>
-                    <div className="flex items-center justify-between p-6 bg-white/50 dark:bg-gray-800/50 rounded-xl">
-                      <span className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                    <div className="flex items-center justify-between p-6 bg-white/50 dark:bg-gray-800/50 rounded-xl hover:bg-white/70 dark:hover:bg-gray-800/70 hover:scale-105 transition-all duration-300 group">
+                      <span className="text-xl font-semibold text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300">
                         English
                       </span>
-                      <span className="text-lg text-gray-600 dark:text-gray-400 bg-blue-100 dark:bg-blue-900/30 px-4 py-2 rounded-full">
+                      <span className="text-lg text-gray-600 dark:text-gray-400 bg-blue-100 dark:bg-blue-900/30 px-4 py-2 rounded-full group-hover:bg-blue-200 dark:group-hover:bg-blue-800/40 transition-colors duration-300">
                         C1 Level
                       </span>
                     </div>
