@@ -143,42 +143,77 @@ export default function Projects() {
 
       <Navbar />
 
-      <main className="min-h-screen bg-gray-50">
-        <section className="py-16">
-          <div className="container-custom">
-            <h1 className="section-title">My Projects</h1>
+      <main className="min-h-screen relative">
+        {/* Background decoration */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900"></div>
+        <div className="absolute top-20 right-10 w-96 h-96 bg-primary-300/10 dark:bg-primary-600/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 left-10 w-96 h-96 bg-accent-300/10 dark:bg-accent-600/10 rounded-full blur-3xl"></div>
 
-            <div className="mb-8 text-center">
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Here you can see some of the most outstanding projects I&apos;ve
-                worked on. Each one represents different aspects of my
-                experience in full stack development, from multi-tenant
-                platforms to AI integrations and e-commerce solutions.
-              </p>
+        <section className="py-20 relative z-10">
+          <div className="container-custom">
+            <div className="text-center mb-16 animate-fade-in">
+              <h1 className="section-title mb-6">My Projects</h1>
+
+              <div className="glass-card p-8 max-w-4xl mx-auto">
+                <p className="text-xl text-gray-700 dark:text-gray-300 leading-relaxed">
+                  Here you can see some of the most outstanding projects
+                  I&apos;ve worked on. Each one represents different aspects of
+                  my experience in full stack development, from multi-tenant
+                  platforms to AI integrations and e-commerce solutions.
+                </p>
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
               {projects.map((project, index) => (
-                <ProjectCard
+                <div
                   key={index}
-                  title={project.title}
-                  description={project.description}
-                  technologies={project.technologies}
-                  githubUrl={project.githubUrl}
-                  demoUrl={project.demoUrl}
-                  imageUrl={project.imageUrl}
-                />
+                  className="animate-slide-up"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <ProjectCard
+                    title={project.title}
+                    description={project.description}
+                    technologies={project.technologies}
+                    githubUrl={project.githubUrl}
+                    demoUrl={project.demoUrl}
+                    imageUrl={project.imageUrl}
+                  />
+                </div>
               ))}
             </div>
 
-            <div className="mt-12 text-center">
-              <p className="text-gray-600 mb-4">
-                Are you interested in any of these projects or want to
-                collaborate on something new?
-              </p>
-              <Link href="/contact" className="btn-primary">
-                Contact Me
-              </Link>
+            <div
+              className="text-center animate-slide-up"
+              style={{ animationDelay: "0.6s" }}
+            >
+              <div className="glass-card p-8 max-w-2xl mx-auto">
+                <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
+                  Are you interested in any of these projects or want to
+                  collaborate on something new?
+                </p>
+                <Link
+                  href="/contact"
+                  className="btn-primary text-lg px-8 py-4 group"
+                >
+                  <span className="flex items-center gap-2">
+                    Let&apos;s Work Together
+                    <svg
+                      className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 7l5 5m0 0l-5 5m5-5H6"
+                      />
+                    </svg>
+                  </span>
+                </Link>
+              </div>
             </div>
           </div>
         </section>
