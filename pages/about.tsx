@@ -31,7 +31,7 @@ export default function About() {
   return (
     <>
       <Head>
-        <title>About - Matias Gallardo</title>
+        <title>Matias Gallardo Portfolio</title>
         <meta
           name="description"
           content="Learn more about Matias Gallardo's experience and skills in full stack development"

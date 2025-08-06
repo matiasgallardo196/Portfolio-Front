@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Matias Gallardo - Full Stack Web Developer</title>
+        <title>Matias Gallardo Portfolio</title>
         <meta
           name="description"
           content="Full Stack Web Developer with strong Back-End orientation. Specialized in NestJS, TypeScript, PostgreSQL, and scalable systems. Based in Sydney, Australia."

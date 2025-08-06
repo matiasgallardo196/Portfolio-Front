@@ -134,7 +134,7 @@ export default function Projects() {
   return (
     <>
       <Head>
-        <title>Projects - Matias Gallardo</title>
+        <title>Matias Gallardo Portfolio</title>
         <meta
           name="description"
           content="Portfolio of full stack development projects by Matias Gallardo"

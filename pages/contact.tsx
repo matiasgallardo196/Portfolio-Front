@@ -49,7 +49,7 @@ export default function Contact() {
   return (
     <>
       <Head>
-        <title>Contact - Matias Gallardo</title>
+        <title>Matias Gallardo Portfolio</title>
         <meta
           name="description"
           content="Contact information and social media links for Matias Gallardo"
