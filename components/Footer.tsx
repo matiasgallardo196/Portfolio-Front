@@ -48,20 +48,29 @@ const Footer = () => {
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-500/5 dark:bg-primary-400/10 rounded-full blur-3xl"></div>
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent-500/5 dark:bg-accent-400/10 rounded-full blur-3xl"></div>
 
-      <div className="container-custom py-12 relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          <div className="mb-6 md:mb-0">
-            <h3 className="text-2xl font-bold gradient-text mb-2">
-              Matias Gallardo
-            </h3>
-            <p className="text-gray-300 dark:text-gray-400 text-lg">
-              Full Stack Web Developer
-            </p>
-            <p className="text-gray-400 dark:text-gray-500 mt-2">
-              © {currentYear} All rights reserved.
+      <div className="container-custom py-8 relative z-10">
+        <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
+          {/* Left side - Copyright */}
+          <div className="text-center lg:text-left">
+            <p className="text-gray-400 dark:text-gray-500 text-lg">
+              © {currentYear} Matias Gallardo. All rights reserved.
             </p>
           </div>
 
+          {/* Center - Built with technologies */}
+          <div className="flex flex-col items-center gap-2 text-gray-400 dark:text-gray-500">
+            <p className="text-sm">Built with modern technologies</p>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-primary-500 dark:bg-primary-400 rounded-full"></span>
+              <span className="text-sm">Next.js</span>
+              <span className="w-2 h-2 bg-accent-500 dark:bg-accent-400 rounded-full"></span>
+              <span className="text-sm">TypeScript</span>
+              <span className="w-2 h-2 bg-purple-500 dark:bg-purple-400 rounded-full"></span>
+              <span className="text-sm">Tailwind CSS</span>
+            </div>
+          </div>
+
+          {/* Right side - Social links */}
           <div className="flex space-x-4">
             {socialLinks.map((link, index) => (
               <a
@@ -78,20 +87,6 @@ const Footer = () => {
                 </div>
               </a>
             ))}
-          </div>
-        </div>
-
-        <div className="mt-12 pt-8 border-t border-white/10 dark:border-gray-700/20 text-center">
-          <div className="flex flex-col md:flex-row justify-center items-center gap-4 text-gray-400 dark:text-gray-500">
-            <p className="text-sm">Built with modern technologies</p>
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-primary-500 dark:bg-primary-400 rounded-full"></span>
-              <span className="text-sm">Next.js</span>
-              <span className="w-2 h-2 bg-accent-500 dark:bg-accent-400 rounded-full"></span>
-              <span className="text-sm">TypeScript</span>
-              <span className="w-2 h-2 bg-purple-500 dark:bg-purple-400 rounded-full"></span>
-              <span className="text-sm">Tailwind CSS</span>
-            </div>
           </div>
         </div>
       </div>

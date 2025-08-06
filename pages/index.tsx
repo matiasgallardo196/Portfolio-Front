@@ -57,7 +57,7 @@ export default function Home() {
                   className="btn-primary text-lg px-10 py-4 group"
                 >
                   <span className="flex items-center gap-2">
-                    View Projects
+                    Checkout My Work
                     <svg
                       className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
                       fill="none"

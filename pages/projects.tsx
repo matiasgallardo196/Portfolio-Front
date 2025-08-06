@@ -187,17 +187,22 @@ export default function Projects() {
               className="text-center animate-slide-up"
               style={{ animationDelay: "0.6s" }}
             >
-              <div className="glass-card p-8 max-w-2xl mx-auto">
-                <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
-                  Are you interested in any of these projects or want to
-                  collaborate on something new?
+              <div className="bg-gradient-to-r from-primary-500/10 to-accent-500/10 dark:from-primary-600/20 dark:to-accent-600/20 backdrop-blur-sm border border-primary-200/20 dark:border-primary-700/20 rounded-2xl p-8 max-w-3xl mx-auto">
+                <h2 className="text-3xl font-bold gradient-text mb-4">
+                  Ready to Start Something Amazing?
+                </h2>
+                <p className="text-lg text-gray-700 dark:text-gray-300 mb-8 leading-relaxed">
+                  I'm always excited to work on new projects and collaborate
+                  with amazing teams. Whether you have a specific project in
+                  mind or just want to explore possibilities, let's create
+                  something incredible together.
                 </p>
                 <Link
                   href="/contact"
-                  className="btn-primary text-lg px-8 py-4 group"
+                  className="btn-primary text-lg px-10 py-4 group inline-flex items-center"
                 >
                   <span className="flex items-center gap-2">
-                    Let&apos;s Work Together
+                    Let's Work Together
                     <svg
                       className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
                       fill="none"
