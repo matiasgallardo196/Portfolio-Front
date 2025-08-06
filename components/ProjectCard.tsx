@@ -1,3 +1,6 @@
+import React from "react";
+import Image from "next/image";
+
 interface ProjectCardProps {
   title: string;
   description: string;
@@ -25,9 +28,11 @@ const ProjectCard = ({
         {imageUrl && (
           <div className="mb-6 overflow-hidden rounded-xl relative">
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10"></div>
-            <img
+            <Image
               src={imageUrl}
               alt={title}
+              width={400}
+              height={224}
               className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-500"
             />
             <div className="absolute top-4 right-4 z-20">
