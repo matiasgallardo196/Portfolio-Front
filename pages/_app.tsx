@@ -1,7 +1,7 @@
 import type { AppProps } from "next/app";
 import "../styles/globals.css";
 import { createContext, useContext, useEffect, useState } from "react";
-import { portfolioData } from "../data";
+import { PortfolioProvider } from "../context/PortfolioContext";
 
 // Contexto para el tema
 type Theme = "light" | "dark";
@@ -23,7 +23,6 @@ export const useTheme = () => {
 
 function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>("light");
-  const { theme: themeConfig } = portfolioData;
 
   useEffect(() => {
     // Obtener el tema guardado en localStorage o usar el tema del sistema
@@ -36,19 +35,16 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
 
     setTheme(initialTheme);
     document.documentElement.classList.toggle("dark", initialTheme === "dark");
+  }, []);
 
-    // Aplicar estilos del tema centralizado
+  useEffect(() => {
+    // Aplicar estilos del tema centralizado usando el contexto
     const root = document.documentElement;
-    root.style.setProperty(
-      "--transition-normal",
-      themeConfig.transitions.normal
-    );
-    root.style.setProperty("--border-radius-lg", themeConfig.borderRadius.lg);
-    root.style.setProperty(
-      "--z-index-navbar",
-      themeConfig.zIndex.navbar.toString()
-    );
-  }, [themeConfig]);
+    // These will be set dynamically when the portfolio context is available
+    root.style.setProperty("--transition-normal", "300ms ease-in-out");
+    root.style.setProperty("--border-radius-lg", "0.75rem");
+    root.style.setProperty("--z-index-navbar", "50");
+  }, []);
 
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
@@ -66,8 +62,10 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <ThemeProvider>
-      <Component {...pageProps} />
-    </ThemeProvider>
+    <PortfolioProvider>
+      <ThemeProvider>
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </PortfolioProvider>
   );
 }

@@ -1,9 +1,10 @@
 import { useTheme } from "../pages/_app";
-import { portfolioData } from "../data";
+import { usePortfolio } from "../context/PortfolioContext";
 
 const ThemeToggle = () => {
   const { theme, toggleTheme } = useTheme();
-  const { theme: themeConfig } = portfolioData;
+  const { portfolio } = usePortfolio();
+  const { theme: themeConfig } = portfolio;
 
   return (
     <button

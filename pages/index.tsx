@@ -3,10 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { portfolioData } from "../data";
+import { usePortfolio } from "../context/PortfolioContext";
 
 export default function Home() {
-  const { about, projects, languages } = portfolioData;
+  const { portfolio } = usePortfolio();
+  const { about, projects, languages } = portfolio;
   return (
     <>
       <Head>
@@ -117,7 +118,7 @@ export default function Home() {
                   </div>
                   <div className="card hover-lift text-center group">
                     <div className="text-5xl font-bold gradient-text mb-4 group-hover:scale-110 transition-transform duration-300">
-                      {Object.values(portfolioData.skills).flat().length}+
+                      {Object.values(portfolio.skills).flat().length}+
                     </div>
                     <div className="text-gray-600 dark:text-gray-400 text-lg font-medium">
                       Technologies Mastered

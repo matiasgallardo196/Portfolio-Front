@@ -1,10 +1,11 @@
 import Head from "next/head";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { portfolioData } from "../data";
+import { usePortfolio } from "../context/PortfolioContext";
 
 export default function Contact() {
-  const { contact } = portfolioData;
+  const { portfolio } = usePortfolio();
+  const { contact } = portfolio;
 
   const contactInfo = [
     {

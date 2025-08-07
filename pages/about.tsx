@@ -2,10 +2,11 @@ import Head from "next/head";
 import Image from "next/image";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { portfolioData } from "../data";
+import { usePortfolio } from "../context/PortfolioContext";
 
 export default function About() {
-  const { skills, achievements, about, languages } = portfolioData;
+  const { portfolio } = usePortfolio();
+  const { skills, achievements, about, languages } = portfolio;
 
   return (
     <>

@@ -3,10 +3,11 @@ import Link from "next/link";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ProjectCard from "../components/ProjectCard";
-import { portfolioData } from "../data";
+import { usePortfolio } from "../context/PortfolioContext";
 
 export default function Projects() {
-  const { projects } = portfolioData;
+  const { portfolio } = usePortfolio();
+  const { projects } = portfolio;
 
   return (
     <>

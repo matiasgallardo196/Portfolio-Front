@@ -2,12 +2,13 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import ThemeToggle from "./ThemeToggle";
-import { portfolioData } from "../data";
+import { usePortfolio } from "../context/PortfolioContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
-  const { theme: themeConfig } = portfolioData;
+  const { portfolio } = usePortfolio();
+  const { theme: themeConfig } = portfolio;
 
   const navItems = [
     { href: "/", label: "Home" },
