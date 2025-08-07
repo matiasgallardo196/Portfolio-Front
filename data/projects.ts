@@ -1,10 +1,14 @@
-import { Project } from './types';
+import { Project } from "./types";
+
+export const projectsPageDescription =
+  "Here you can see some of the most outstanding projects I've worked on. Each one represents different aspects of my experience in full stack development, from multi-tenant platforms to AI integrations and e-commerce solutions.";
 
 export const projectsData: Project[] = [
   {
     id: "project-1",
     title: "SmartQR – QR Order Platform for Restaurants",
-    description: "Multi-tenant platform for restaurants where customers scan a QR code on their table to order without waitstaff. Each restaurant has its own dashboard with reports, product management, and billing. Led the development of the entire reports module and integrated Stripe payment system and OpenAI-powered chatbot.",
+    description:
+      "Multi-tenant platform for restaurants where customers scan a QR code on their table to order without waitstaff. Each restaurant has its own dashboard with reports, product management, and billing. Led the development of the entire reports module and integrated Stripe payment system and OpenAI-powered chatbot.",
     technologies: [
       "NestJS",
       "PostgreSQL",
@@ -29,7 +33,8 @@ export const projectsData: Project[] = [
   {
     id: "project-2",
     title: "AI Agent – Conversational Assistant for Web & WhatsApp",
-    description: "Conversational assistant designed for a technical challenge by Laburen.com. The system detects user intents (e.g., product search, cart creation) and responds via WhatsApp or a web interface. Features modular architecture and full backend implementation from scratch with Twilio integration.",
+    description:
+      "Conversational assistant designed for a technical challenge by Laburen.com. The system detects user intents (e.g., product search, cart creation) and responds via WhatsApp or a web interface. Features modular architecture and full backend implementation from scratch with Twilio integration.",
     technologies: [
       "NestJS",
       "TypeScript",
@@ -52,7 +57,8 @@ export const projectsData: Project[] = [
   {
     id: "project-3",
     title: "E-Commerce API – Backend for Online Store",
-    description: "RESTful API built with NestJS to support a complete e-commerce system. Includes user authentication with roles, comprehensive CRUD operations for products and user management, image uploads with Cloudinary, and order creation with purchase details. Deployed with CI/CD pipeline.",
+    description:
+      "RESTful API built with NestJS to support a complete e-commerce system. Includes user authentication with roles, comprehensive CRUD operations for products and user management, image uploads with Cloudinary, and order creation with purchase details. Deployed with CI/CD pipeline.",
     technologies: [
       "NestJS",
       "TypeScript",
@@ -74,7 +80,8 @@ export const projectsData: Project[] = [
   {
     id: "project-4",
     title: "Royal Hotel Booking – Appointment Booking Platform",
-    description: "Full-stack platform that allows users to register, log in, and schedule hotel appointments through a modern interface. The system includes real-time validations, JWT authentication, image uploads, and email notifications with SendGrid integration.",
+    description:
+      "Full-stack platform that allows users to register, log in, and schedule hotel appointments through a modern interface. The system includes real-time validations, JWT authentication, image uploads, and email notifications with SendGrid integration.",
     technologies: [
       "Node.js",
       "TypeScript",
@@ -93,14 +100,16 @@ export const projectsData: Project[] = [
       "Netlify",
       "Railway",
     ],
-    githubUrl: "https://github.com/matiasgallardo196/royal-hotel-booking-system",
+    githubUrl:
+      "https://github.com/matiasgallardo196/royal-hotel-booking-system",
     demoUrl: "https://cute-fox-c52c9e.netlify.app/",
     imageUrl: "/project4.jpg",
   },
   {
     id: "project-5",
     title: "MatiMovies – Movie Management System",
-    description: "Full-stack application for managing and visualizing a catalog of movies. Includes form-based movie creation, a public catalog, and informational pages about cinema. Developed during full stack development training as a learning project with MongoDB integration.",
+    description:
+      "Full-stack application for managing and visualizing a catalog of movies. Includes form-based movie creation, a public catalog, and informational pages about cinema. Developed during full stack development training as a learning project with MongoDB integration.",
     technologies: [
       "Node.js",
       "Express.js",
@@ -117,8 +126,17 @@ export const projectsData: Project[] = [
       "Railway",
       "MongoDB Atlas",
     ],
-    githubUrl: "https://github.com/matiasgallardo196/mati-movies-management-system",
-    demoUrl: "https://matimovies-movie-management-system-front-production.up.railway.app",
+    githubUrl:
+      "https://github.com/matiasgallardo196/mati-movies-management-system",
+    demoUrl:
+      "https://matimovies-movie-management-system-front-production.up.railway.app",
     imageUrl: "/project5.jpg",
   },
-]; 
+];
+
+export const projectsCallToAction = {
+  title: "Ready to Start Something Amazing?",
+  description:
+    "I'm always excited to work on new projects and collaborate with amazing teams. Whether you have a specific project in mind or just want to explore possibilities, let's create something incredible together.",
+  buttonText: "Let's Work Together",
+};

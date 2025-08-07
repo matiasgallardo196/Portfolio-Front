@@ -25,33 +25,14 @@ const ErrorMessage = ({ message }: { message: string }) => (
 );
 
 export default function Home() {
-  const { portfolio, loading, error } = usePortfolio();
-
-  // Show loading spinner while data is being fetched
-  if (loading) {
-    return <LoadingSpinner />;
-  }
-
-  // Show error message if there's an error
-  if (error) {
-    return <ErrorMessage message={error} />;
-  }
-
-  // Show loading spinner if portfolio is still null
-  if (!portfolio) {
-    return <LoadingSpinner />;
-  }
-
+  const { portfolio } = usePortfolio();
   const { about, projects, languages } = portfolio;
 
   return (
     <>
       <Head>
-        <title>Matias Gallardo Portfolio</title>
-        <meta
-          name="description"
-          content="Full Stack Web Developer with strong Back-End orientation. Specialized in NestJS, TypeScript, PostgreSQL, and scalable systems. Based in Sydney, Australia."
-        />
+        <title>{about.fullName} Portfolio</title>
+        <meta name="description" content={about.metaDescription} />
       </Head>
 
       <Navbar />
@@ -79,9 +60,9 @@ export default function Home() {
                   {about.fullName}
                 </h1>
                 <h2 className="text-2xl md:text-3xl text-gray-700 dark:text-gray-300 font-semibold mb-8">
-                  Full Stack Web Developer
+                  {about.heroTitle}
                   <span className="block text-lg text-primary-600 dark:text-primary-400 font-medium mt-2">
-                    Back-End Oriented
+                    {about.heroSubtitle}
                   </span>
                 </h2>
               </div>
@@ -96,7 +77,7 @@ export default function Home() {
                   className="btn-primary text-lg px-10 py-4 group"
                 >
                   <span className="flex items-center gap-2">
-                    Checkout My Work
+                    {about.ctaButtons.projects}
                     <svg
                       className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
                       fill="none"
@@ -117,7 +98,7 @@ export default function Home() {
                   className="btn-secondary text-lg px-10 py-4 group"
                 >
                   <span className="flex items-center gap-2">
-                    Contact Me
+                    {about.ctaButtons.contact}
                     <svg
                       className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
                       fill="none"
@@ -146,10 +127,10 @@ export default function Home() {
                       {projects.length}+
                     </div>
                     <div className="text-gray-600 dark:text-gray-400 text-lg font-medium">
-                      Full-Stack Projects Deployed
+                      {about.stats.projects.title}
                     </div>
                     <div className="mt-4 text-sm text-gray-500 dark:text-gray-500">
-                      Production-ready applications
+                      {about.stats.projects.subtitle}
                     </div>
                   </div>
                   <div className="card hover-lift text-center group">
@@ -157,10 +138,10 @@ export default function Home() {
                       {Object.values(portfolio.skills).flat().length}+
                     </div>
                     <div className="text-gray-600 dark:text-gray-400 text-lg font-medium">
-                      Technologies Mastered
+                      {about.stats.technologies.title}
                     </div>
                     <div className="mt-4 text-sm text-gray-500 dark:text-gray-500">
-                      Modern stack expertise
+                      {about.stats.technologies.subtitle}
                     </div>
                   </div>
                   <div className="card hover-lift text-center group">
@@ -168,10 +149,11 @@ export default function Home() {
                       {languages.length}
                     </div>
                     <div className="text-gray-600 dark:text-gray-400 text-lg font-medium">
-                      Languages ({languages.map((l) => l.name).join(" & ")})
+                      {about.stats.languages.title} (
+                      {languages.map((l) => l.name).join(" & ")})
                     </div>
                     <div className="mt-4 text-sm text-gray-500 dark:text-gray-500">
-                      Bilingual communication
+                      {about.stats.languages.subtitle}
                     </div>
                   </div>
                 </div>

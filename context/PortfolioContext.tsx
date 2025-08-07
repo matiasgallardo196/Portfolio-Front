@@ -6,12 +6,14 @@ import React, {
   useEffect,
 } from "react";
 import { PortfolioData } from "../data/types";
+import { portfolioData } from "../data";
 
 // Context interface
 interface PortfolioContextType {
-  portfolio: PortfolioData | null;
+  portfolio: PortfolioData;
   loading: boolean;
   error: string | null;
+  hasApiError: boolean;
   // Future API methods can be added here
   // refreshPortfolio: () => Promise<void>;
   // updatePortfolio: (data: Partial<PortfolioData>) => Promise<void>;
@@ -31,41 +33,24 @@ interface PortfolioProviderProps {
 export const PortfolioProvider: React.FC<PortfolioProviderProps> = ({
   children,
 }) => {
-  const [portfolio, setPortfolio] = useState<PortfolioData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [portfolio, setPortfolio] = useState<PortfolioData>(portfolioData);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [hasApiError, setHasApiError] = useState(false);
 
+  // Simulate API loading with useEffect for future migration
   useEffect(() => {
-    const fetchPortfolio = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const response = await fetch("http://localhost:3001/api/portfolio");
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data: PortfolioData = await response.json();
-        setPortfolio(data);
-      } catch (err) {
-        console.error("Failed to fetch portfolio data:", err);
-        setError(
-          err instanceof Error ? err.message : "Failed to fetch portfolio data"
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPortfolio();
+    // For now, we use mock data directly
+    // In the future, this could be replaced with a real API call
+    setPortfolio(portfolioData);
+    setLoading(false);
   }, []);
 
   const contextValue: PortfolioContextType = {
     portfolio,
     loading,
     error,
+    hasApiError,
   };
 
   return (

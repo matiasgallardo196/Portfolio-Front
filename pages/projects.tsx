@@ -4,50 +4,19 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ProjectCard from "../components/ProjectCard";
 import { usePortfolio } from "../context/PortfolioContext";
-
-// Loading component
-const LoadingSpinner = () => (
-  <div className="min-h-screen flex items-center justify-center">
-    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600"></div>
-  </div>
-);
-
-// Error component
-const ErrorMessage = ({ message }: { message: string }) => (
-  <div className="min-h-screen flex items-center justify-center">
-    <div className="text-center">
-      <h2 className="text-2xl font-bold text-red-600 mb-4">
-        Error Loading Projects
-      </h2>
-      <p className="text-gray-600 dark:text-gray-400">{message}</p>
-    </div>
-  </div>
-);
+import {
+  projectsPageDescription,
+  projectsCallToAction,
+} from "../data/projects";
 
 export default function Projects() {
-  const { portfolio, loading, error } = usePortfolio();
-
-  // Show loading spinner while data is being fetched
-  if (loading) {
-    return <LoadingSpinner />;
-  }
-
-  // Show error message if there's an error
-  if (error) {
-    return <ErrorMessage message={error} />;
-  }
-
-  // Show loading spinner if portfolio is still null
-  if (!portfolio) {
-    return <LoadingSpinner />;
-  }
-
+  const { portfolio } = usePortfolio();
   const { projects } = portfolio;
 
   return (
     <>
       <Head>
-        <title>Matias Gallardo Portfolio</title>
+        <title>{portfolio.about.fullName} Portfolio</title>
         <meta
           name="description"
           content="Portfolio of full stack development projects by Matias Gallardo"
@@ -69,10 +38,7 @@ export default function Projects() {
 
               <div className="glass-card p-8 max-w-4xl mx-auto">
                 <p className="text-xl text-gray-700 dark:text-gray-300 leading-relaxed">
-                  Here you can see some of the most outstanding projects
-                  I&apos;ve worked on. Each one represents different aspects of
-                  my experience in full stack development, from multi-tenant
-                  platforms to AI integrations and e-commerce solutions.
+                  {projectsPageDescription}
                 </p>
               </div>
             </div>
@@ -102,20 +68,17 @@ export default function Projects() {
             >
               <div className="bg-gradient-to-r from-primary-500/10 to-accent-500/10 dark:from-primary-600/20 dark:to-accent-600/20 backdrop-blur-sm border border-primary-200/20 dark:border-primary-700/20 rounded-2xl p-8 max-w-3xl mx-auto">
                 <h2 className="text-3xl font-bold gradient-text mb-4">
-                  Ready to Start Something Amazing?
+                  {projectsCallToAction.title}
                 </h2>
                 <p className="text-lg text-gray-700 dark:text-gray-300 mb-8 leading-relaxed">
-                  I&apos;m always excited to work on new projects and
-                  collaborate with amazing teams. Whether you have a specific
-                  project in mind or just want to explore possibilities,
-                  let&apos;s create something incredible together.
+                  {projectsCallToAction.description}
                 </p>
                 <Link
                   href="/contact"
                   className="btn-primary text-lg px-10 py-4 group inline-flex items-center"
                 >
                   <span className="flex items-center gap-2">
-                    Let&apos;s Work Together
+                    {projectsCallToAction.buttonText}
                     <svg
                       className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
                       fill="none"

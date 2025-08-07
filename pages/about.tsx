@@ -4,53 +4,15 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { usePortfolio } from "../context/PortfolioContext";
 
-// Loading component
-const LoadingSpinner = () => (
-  <div className="min-h-screen flex items-center justify-center">
-    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600"></div>
-  </div>
-);
-
-// Error component
-const ErrorMessage = ({ message }: { message: string }) => (
-  <div className="min-h-screen flex items-center justify-center">
-    <div className="text-center">
-      <h2 className="text-2xl font-bold text-red-600 mb-4">
-        Error Loading About
-      </h2>
-      <p className="text-gray-600 dark:text-gray-400">{message}</p>
-    </div>
-  </div>
-);
-
 export default function About() {
-  const { portfolio, loading, error } = usePortfolio();
-
-  // Show loading spinner while data is being fetched
-  if (loading) {
-    return <LoadingSpinner />;
-  }
-
-  // Show error message if there's an error
-  if (error) {
-    return <ErrorMessage message={error} />;
-  }
-
-  // Show loading spinner if portfolio is still null
-  if (!portfolio) {
-    return <LoadingSpinner />;
-  }
-
+  const { portfolio } = usePortfolio();
   const { skills, achievements, about, languages } = portfolio;
 
   return (
     <>
       <Head>
-        <title>Matias Gallardo Portfolio</title>
-        <meta
-          name="description"
-          content="Learn more about Matias Gallardo's experience and skills in full stack development"
-        />
+        <title>{about.fullName} Portfolio</title>
+        <meta name="description" content={about.pageDescription} />
       </Head>
 
       <Navbar />
@@ -78,7 +40,7 @@ export default function About() {
                       <div className="relative w-56 h-56 mx-auto group">
                         <div className="absolute inset-0 bg-gradient-to-r from-primary-400 to-accent-400 dark:from-primary-500 dark:to-accent-500 rounded-full blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
                         <Image
-                          src="/avatar.jpg"
+                          src={about.avatarUrl}
                           alt={about.fullName}
                           fill
                           className="rounded-full object-cover shadow-2xl border-4 border-white/20 dark:border-gray-700/20 floating"
@@ -100,7 +62,7 @@ export default function About() {
                             {about.location}
                           </p>
                           <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
-                            Open to relocate
+                            {about.relocationStatus}
                           </p>
                         </div>
                       </div>

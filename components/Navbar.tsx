@@ -38,7 +38,7 @@ const Navbar = () => {
               transition: themeConfig.transitions.normal,
             }}
           >
-            Matias Gallardo
+            {portfolio.about.fullName}
           </Link>
 
           {/* Desktop Navigation */}
