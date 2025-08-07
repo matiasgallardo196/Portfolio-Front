@@ -42,6 +42,9 @@ export interface ContactInfo {
   whatsapp?: string;
 }
 
+// Import ThemeData interface from theme.ts
+import { ThemeData } from "./theme";
+
 export interface PortfolioData {
   about: About;
   skills: SkillCategory;
@@ -49,4 +52,5 @@ export interface PortfolioData {
   languages: Language[];
   projects: Project[];
   contact: ContactInfo;
+  theme: ThemeData;
 }

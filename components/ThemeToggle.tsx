@@ -1,20 +1,27 @@
 import { useTheme } from "../pages/_app";
+import { portfolioData } from "../data";
 
 const ThemeToggle = () => {
   const { theme, toggleTheme } = useTheme();
+  const { theme: themeConfig } = portfolioData;
 
   return (
     <button
       onClick={toggleTheme}
       className="relative p-2 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 border border-white/20 hover:border-white/30 transition-all duration-300 group"
+      style={{
+        borderRadius: themeConfig.borderRadius.lg,
+        transition: themeConfig.transitions.normal,
+      }}
       aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
     >
       <div className="relative w-6 h-6">
         {/* Sol */}
         <svg
-          className={`w-6 h-6 text-yellow-500 transition-all duration-500 ${
+          className={`w-6 h-6 transition-all duration-500 ${
             theme === "light" ? "opacity-100 rotate-0" : "opacity-0 -rotate-90"
           }`}
+          style={{ color: themeConfig.colors.yellow[500] }}
           fill="currentColor"
           viewBox="0 0 24 24"
         >
@@ -23,9 +30,10 @@ const ThemeToggle = () => {
 
         {/* Luna */}
         <svg
-          className={`absolute top-0 left-0 w-6 h-6 text-blue-400 transition-all duration-500 ${
+          className={`absolute top-0 left-0 w-6 h-6 transition-all duration-500 ${
             theme === "dark" ? "opacity-100 rotate-0" : "opacity-0 rotate-90"
           }`}
+          style={{ color: themeConfig.colors.blue[400] }}
           fill="currentColor"
           viewBox="0 0 24 24"
         >
@@ -34,7 +42,14 @@ const ThemeToggle = () => {
       </div>
 
       {/* Efecto de glow */}
-      <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-yellow-400/20 to-blue-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      <div
+        className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        style={{
+          borderRadius: themeConfig.borderRadius.lg,
+          background: `linear-gradient(to right, ${themeConfig.colors.yellow[400]}20, ${themeConfig.colors.blue[400]}20)`,
+          transition: themeConfig.transitions.normal,
+        }}
+      ></div>
     </button>
   );
 };

@@ -2,10 +2,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import ThemeToggle from "./ThemeToggle";
+import { portfolioData } from "../data";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  const { theme: themeConfig } = portfolioData;
 
   const navItems = [
     { href: "/", label: "Home" },
@@ -17,13 +19,23 @@ const Navbar = () => {
   const isActive = (href: string) => router.pathname === href;
 
   return (
-    <nav className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg sticky top-0 z-50 border-b border-white/20 dark:border-gray-700/20">
+    <nav
+      className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg sticky top-0 z-50 border-b border-white/20 dark:border-gray-700/20"
+      style={{
+        zIndex: themeConfig.zIndex.navbar,
+        height: themeConfig.spacing.navbar.height,
+        backdropFilter: `blur(${themeConfig.backdropBlur.md})`,
+      }}
+    >
       <div className="container-custom">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link
             href="/"
             className="text-2xl font-bold gradient-text hover:scale-105 transition-transform duration-300"
+            style={{
+              transition: themeConfig.transitions.normal,
+            }}
           >
             Matias Gallardo
           </Link>
