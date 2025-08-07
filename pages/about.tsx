@@ -4,8 +4,43 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { usePortfolio } from "../context/PortfolioContext";
 
+// Loading component
+const LoadingSpinner = () => (
+  <div className="min-h-screen flex items-center justify-center">
+    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600"></div>
+  </div>
+);
+
+// Error component
+const ErrorMessage = ({ message }: { message: string }) => (
+  <div className="min-h-screen flex items-center justify-center">
+    <div className="text-center">
+      <h2 className="text-2xl font-bold text-red-600 mb-4">
+        Error Loading About
+      </h2>
+      <p className="text-gray-600 dark:text-gray-400">{message}</p>
+    </div>
+  </div>
+);
+
 export default function About() {
-  const { portfolio } = usePortfolio();
+  const { portfolio, loading, error } = usePortfolio();
+
+  // Show loading spinner while data is being fetched
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
+  // Show error message if there's an error
+  if (error) {
+    return <ErrorMessage message={error} />;
+  }
+
+  // Show loading spinner if portfolio is still null
+  if (!portfolio) {
+    return <LoadingSpinner />;
+  }
+
   const { skills, achievements, about, languages } = portfolio;
 
   return (
