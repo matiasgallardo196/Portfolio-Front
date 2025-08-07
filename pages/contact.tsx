@@ -141,14 +141,14 @@ export default function Contact() {
                           {contact.currentStatusTitle}
                         </h3>
                         <div className="space-y-3">
-                          {contact.opportunities.map((item, index) => (
+                          {contact.opportunities.map((item) => (
                             <div
-                              key={index}
+                              key={item.id}
                               className="flex items-center gap-3"
                             >
                               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                               <span className="text-gray-700 dark:text-gray-300">
-                                {item}
+                                {item.name}
                               </span>
                             </div>
                           ))}
@@ -161,14 +161,14 @@ export default function Contact() {
                           {contact.locationTitle}
                         </h3>
                         <div className="space-y-3">
-                          {contact.locationInfo.map((item, index) => (
+                          {contact.locationInfo.map((item) => (
                             <div
-                              key={index}
+                              key={item.id}
                               className="flex items-center gap-3"
                             >
                               <div className="w-2 h-2 bg-primary-500 dark:bg-primary-400 rounded-full"></div>
                               <span className="text-gray-700 dark:text-gray-300">
-                                {item}
+                                {item.name}
                               </span>
                             </div>
                           ))}

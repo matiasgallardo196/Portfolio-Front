@@ -14,14 +14,14 @@ export const contactData: ContactInfo = {
   availabilityTitle: "Availability",
   currentStatusTitle: "Current Status",
   opportunities: [
-    "Full-time opportunities",
-    "Freelance projects",
-    "Open source collaborations",
+    { id: "opp-1", name: "Full-time opportunities" },
+    { id: "opp-2", name: "Freelance projects" },
+    { id: "opp-3", name: "Open source collaborations" },
   ],
   locationTitle: "Location & Relocation",
   locationInfo: [
-    "Based in Sydney, Australia",
-    "Open to relocate within Australia",
-    "Available for remote work",
+    { id: "loc-1", name: "Based in Sydney, Australia" },
+    { id: "loc-2", name: "Open to relocate within Australia" },
+    { id: "loc-3", name: "Available for remote work" },
   ],
 };

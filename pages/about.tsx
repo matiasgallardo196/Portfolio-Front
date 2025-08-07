@@ -181,12 +181,12 @@ export default function About() {
                         Languages
                       </h3>
                       <div className="flex flex-wrap gap-2">
-                        {skills.languages.map((skill, index) => (
+                        {skills.languages.map((skill) => (
                           <span
-                            key={index}
+                            key={skill.id}
                             className="px-4 py-2 bg-gradient-to-r from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 text-blue-800 dark:text-blue-300 text-sm font-semibold rounded-full border border-blue-200 dark:border-blue-700/30 hover:scale-105 transition-transform duration-200"
                           >
-                            {skill}
+                            {skill.name}
                           </span>
                         ))}
                       </div>
@@ -207,12 +207,12 @@ export default function About() {
                         Frontend
                       </h3>
                       <div className="flex flex-wrap gap-2">
-                        {skills.frontend.map((skill, index) => (
+                        {skills.frontend.map((skill) => (
                           <span
-                            key={index}
+                            key={skill.id}
                             className="px-4 py-2 bg-gradient-to-r from-green-100 to-green-200 dark:from-green-900/30 dark:to-green-800/30 text-green-800 dark:text-green-300 text-sm font-semibold rounded-full border border-green-200 dark:border-green-700/30 hover:scale-105 transition-transform duration-200"
                           >
-                            {skill}
+                            {skill.name}
                           </span>
                         ))}
                       </div>
@@ -233,12 +233,12 @@ export default function About() {
                         Backend
                       </h3>
                       <div className="flex flex-wrap gap-2">
-                        {skills.backend.map((skill, index) => (
+                        {skills.backend.map((skill) => (
                           <span
-                            key={index}
+                            key={skill.id}
                             className="px-4 py-2 bg-gradient-to-r from-purple-100 to-purple-200 dark:from-purple-900/30 dark:to-purple-800/30 text-purple-800 dark:text-purple-300 text-sm font-semibold rounded-full border border-purple-200 dark:border-purple-700/30 hover:scale-105 transition-transform duration-200"
                           >
-                            {skill}
+                            {skill.name}
                           </span>
                         ))}
                       </div>
@@ -259,12 +259,12 @@ export default function About() {
                         Databases
                       </h3>
                       <div className="flex flex-wrap gap-2">
-                        {skills.databases.map((skill, index) => (
+                        {skills.databases.map((skill) => (
                           <span
-                            key={index}
+                            key={skill.id}
                             className="px-4 py-2 bg-gradient-to-r from-orange-100 to-orange-200 dark:from-orange-900/30 dark:to-orange-800/30 text-orange-800 dark:text-orange-300 text-sm font-semibold rounded-full border border-orange-200 dark:border-orange-700/30 hover:scale-105 transition-transform duration-200"
                           >
-                            {skill}
+                            {skill.name}
                           </span>
                         ))}
                       </div>
@@ -285,12 +285,12 @@ export default function About() {
                         DevOps & Tools
                       </h3>
                       <div className="flex flex-wrap gap-2">
-                        {skills.devops.map((skill, index) => (
+                        {skills.devops.map((skill) => (
                           <span
-                            key={index}
+                            key={skill.id}
                             className="px-4 py-2 bg-gradient-to-r from-indigo-100 to-indigo-200 dark:from-indigo-900/30 dark:to-indigo-800/30 text-indigo-800 dark:text-indigo-300 text-sm font-semibold rounded-full border border-indigo-200 dark:border-indigo-700/30 hover:scale-105 transition-transform duration-200"
                           >
-                            {skill}
+                            {skill.name}
                           </span>
                         ))}
                       </div>
@@ -311,12 +311,12 @@ export default function About() {
                         Integrations
                       </h3>
                       <div className="flex flex-wrap gap-2">
-                        {skills.integrations.map((skill, index) => (
+                        {skills.integrations.map((skill) => (
                           <span
-                            key={index}
+                            key={skill.id}
                             className="px-4 py-2 bg-gradient-to-r from-pink-100 to-pink-200 dark:from-pink-900/30 dark:to-pink-800/30 text-pink-800 dark:text-pink-300 text-sm font-semibold rounded-full border border-pink-200 dark:border-pink-700/30 hover:scale-105 transition-transform duration-200"
                           >
-                            {skill}
+                            {skill.name}
                           </span>
                         ))}
                       </div>
@@ -329,12 +329,12 @@ export default function About() {
                       Best Practices & Architecture
                     </h3>
                     <div className="flex flex-wrap gap-3">
-                      {skills.practices.map((skill, index) => (
+                      {skills.practices.map((skill) => (
                         <span
-                          key={index}
+                          key={skill.id}
                           className="px-4 py-2 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-800/30 dark:to-gray-700/30 text-gray-800 dark:text-gray-300 text-sm font-semibold rounded-full border border-gray-200 dark:border-gray-600/30 hover:scale-105 transition-transform duration-200"
                         >
-                          {skill}
+                          {skill.name}
                         </span>
                       ))}
                     </div>

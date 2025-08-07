@@ -28,14 +28,19 @@ export interface About {
   };
 }
 
+export interface SkillItem {
+  id: string;
+  name: string;
+}
+
 export interface SkillCategory {
-  languages: string[];
-  frontend: string[];
-  backend: string[];
-  databases: string[];
-  devops: string[];
-  integrations: string[];
-  practices: string[];
+  languages: SkillItem[];
+  frontend: SkillItem[];
+  backend: SkillItem[];
+  databases: SkillItem[];
+  devops: SkillItem[];
+  integrations: SkillItem[];
+  practices: SkillItem[];
 }
 
 export interface Achievement {
@@ -44,6 +49,7 @@ export interface Achievement {
 }
 
 export interface Language {
+  id: string;
   name: string;
   level: string;
   isNative?: boolean;
@@ -53,7 +59,7 @@ export interface Project {
   id: string;
   title: string;
   description: string;
-  technologies: string[];
+  technologies: SkillItem[];
   githubUrl: string;
   demoUrl?: string;
   imageUrl: string;
@@ -71,9 +77,9 @@ export interface ContactInfo {
   letsTalkDescription: string;
   availabilityTitle: string;
   currentStatusTitle: string;
-  opportunities: string[];
+  opportunities: SkillItem[];
   locationTitle: string;
-  locationInfo: string[];
+  locationInfo: SkillItem[];
 }
 
 // Import ThemeData interface from theme.ts
