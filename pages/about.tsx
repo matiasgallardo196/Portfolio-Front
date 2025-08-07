@@ -2,31 +2,10 @@ import Head from "next/head";
 import Image from "next/image";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { portfolioData } from "../data";
 
 export default function About() {
-  const skills = {
-    languages: ["JavaScript", "TypeScript", "SQL"],
-    frontend: ["React", "Recharts", "HTML", "CSS", "TailwindCSS"],
-    backend: ["NestJS", "Node.js", "Express", "RESTful APIs"],
-    databases: ["PostgreSQL", "MongoDB"],
-    devops: ["Docker", "Vercel", "Render", "Supabase", "Git", "GitHub"],
-    integrations: ["Auth0", "Stripe", "Nodemailer", "Cloudinary", "OpenAI"],
-    practices: [
-      "Testing",
-      "Access Control",
-      "Validation",
-      "Multi-Tenant Architecture",
-    ],
-  };
-
-  const achievements = [
-    "5 full-stack projects deployed to production with CI/CD",
-    "Experience with multi-tenant architecture, Stripe, and OpenAI integrations",
-    "Proficient in backend development with NestJS, PostgreSQL, and Docker",
-    "Designed and implemented secure REST APIs with role-based access",
-    "Hands-on deployment experience with Oracle Cloud, Render, Vercel, Netlify, Railway, Fly",
-    "Teaching Assistant at Henry bootcamp, supporting students in JavaScript, TypeScript, React, Node, NestJS",
-  ];
+  const { skills, achievements, about, languages } = portfolioData;
 
   return (
     <>
@@ -64,7 +43,7 @@ export default function About() {
                         <div className="absolute inset-0 bg-gradient-to-r from-primary-400 to-accent-400 dark:from-primary-500 dark:to-accent-500 rounded-full blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
                         <Image
                           src="/avatar.jpg"
-                          alt="Matias Gallardo"
+                          alt={about.fullName}
                           fill
                           className="rounded-full object-cover shadow-2xl border-4 border-white/20 dark:border-gray-700/20 floating"
                           priority
@@ -82,7 +61,7 @@ export default function About() {
                         <span className="text-2xl">📍</span>
                         <div className="flex flex-col">
                           <p className="text-lg text-gray-700 dark:text-gray-300 font-medium">
-                            Sydney, Australia
+                            {about.location}
                           </p>
                           <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
                             Open to relocate
@@ -99,29 +78,21 @@ export default function About() {
                         My Story
                       </h2>
                       <div className="prose prose-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                        <p className="mb-6 text-xl">
-                          I&apos;m a Full Stack Web Developer with a strong
-                          Back-End orientation, passionate about building
-                          scalable systems and delivering real-world solutions
-                          with measurable impact. I graduated from Henry&apos;s
-                          intensive bootcamp and hold a Technical Analyst degree
-                          in Information Systems from UTN FRT.
-                        </p>
-                        <p className="mb-6 text-xl">
-                          I specialize in modern technologies and follow best
-                          practices in validation, testing, and secure access
-                          control through RESTful APIs. My experience includes
-                          multi-tenant platforms, Stripe integrations, GitHub
-                          Actions, and cloud deployment across various
-                          platforms.
-                        </p>
-                        <p className="text-xl">
-                          I&apos;m passionate about clean architecture,
-                          automation, and creating solutions that make a real
-                          difference. When I&apos;m not coding, I enjoy
-                          contributing to the developer community and staying
-                          updated with the latest technologies.
-                        </p>
+                        {about.biography
+                          .split("\n\n")
+                          .map((paragraph, index) => (
+                            <p
+                              key={index}
+                              className={
+                                index ===
+                                about.biography.split("\n\n").length - 1
+                                  ? "text-xl"
+                                  : "mb-6 text-xl"
+                              }
+                            >
+                              {paragraph}
+                            </p>
+                          ))}
                       </div>
                     </div>
                   </div>
@@ -138,11 +109,14 @@ export default function About() {
                     Key Achievements
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {achievements.map((achievement, index) => (
-                      <div key={index} className="flex items-start gap-3 group">
+                    {achievements.map((achievement) => (
+                      <div
+                        key={achievement.id}
+                        className="flex items-start gap-3 group"
+                      >
                         <div className="w-2 h-2 bg-green-500 rounded-full mt-3 group-hover:scale-150 transition-transform duration-300"></div>
                         <span className="text-gray-700 dark:text-gray-300 text-lg">
-                          {achievement}
+                          {achievement.description}
                         </span>
                       </div>
                     ))}
@@ -160,22 +134,25 @@ export default function About() {
                     Languages
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="flex items-center justify-between p-6 bg-white/50 dark:bg-gray-800/50 rounded-xl hover:bg-white/70 dark:hover:bg-gray-800/70 hover:scale-105 transition-all duration-300 group">
-                      <span className="text-xl font-semibold text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300">
-                        Spanish
-                      </span>
-                      <span className="text-lg text-gray-600 dark:text-gray-400 bg-green-100 dark:bg-green-900/30 px-4 py-2 rounded-full group-hover:bg-green-200 dark:group-hover:bg-green-800/40 transition-colors duration-300">
-                        Mother Tongue
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between p-6 bg-white/50 dark:bg-gray-800/50 rounded-xl hover:bg-white/70 dark:hover:bg-gray-800/70 hover:scale-105 transition-all duration-300 group">
-                      <span className="text-xl font-semibold text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300">
-                        English
-                      </span>
-                      <span className="text-lg text-gray-600 dark:text-gray-400 bg-blue-100 dark:bg-blue-900/30 px-4 py-2 rounded-full group-hover:bg-blue-200 dark:group-hover:bg-blue-800/40 transition-colors duration-300">
-                        C1 Level
-                      </span>
-                    </div>
+                    {languages.map((language) => (
+                      <div
+                        key={language.name}
+                        className="flex items-center justify-between p-6 bg-white/50 dark:bg-gray-800/50 rounded-xl hover:bg-white/70 dark:hover:bg-gray-800/70 hover:scale-105 transition-all duration-300 group"
+                      >
+                        <span className="text-xl font-semibold text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300">
+                          {language.name}
+                        </span>
+                        <span
+                          className={`text-lg text-gray-600 dark:text-gray-400 px-4 py-2 rounded-full transition-colors duration-300 ${
+                            language.isNative
+                              ? "bg-green-100 dark:bg-green-900/30 group-hover:bg-green-200 dark:group-hover:bg-green-800/40"
+                              : "bg-blue-100 dark:bg-blue-900/30 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/40"
+                          }`}
+                        >
+                          {language.level}
+                        </span>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>

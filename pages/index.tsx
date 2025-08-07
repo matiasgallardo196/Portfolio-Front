@@ -3,8 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { portfolioData } from "../data";
 
 export default function Home() {
+  const { about, projects, languages } = portfolioData;
   return (
     <>
       <Head>
@@ -37,7 +39,7 @@ export default function Home() {
               {/* Name and Title */}
               <div className="animate-slide-up">
                 <h1 className="text-6xl md:text-7xl font-bold mb-6 gradient-text">
-                  Matias Gallardo
+                  {about.fullName}
                 </h1>
                 <h2 className="text-2xl md:text-3xl text-gray-700 dark:text-gray-300 font-semibold mb-8">
                   Full Stack Web Developer
@@ -104,7 +106,7 @@ export default function Home() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   <div className="card hover-lift text-center group">
                     <div className="text-5xl font-bold gradient-text mb-4 group-hover:scale-110 transition-transform duration-300">
-                      5+
+                      {projects.length}+
                     </div>
                     <div className="text-gray-600 dark:text-gray-400 text-lg font-medium">
                       Full-Stack Projects Deployed
@@ -115,7 +117,7 @@ export default function Home() {
                   </div>
                   <div className="card hover-lift text-center group">
                     <div className="text-5xl font-bold gradient-text mb-4 group-hover:scale-110 transition-transform duration-300">
-                      15+
+                      {Object.values(portfolioData.skills).flat().length}+
                     </div>
                     <div className="text-gray-600 dark:text-gray-400 text-lg font-medium">
                       Technologies Mastered
@@ -126,10 +128,10 @@ export default function Home() {
                   </div>
                   <div className="card hover-lift text-center group">
                     <div className="text-5xl font-bold gradient-text mb-4 group-hover:scale-110 transition-transform duration-300">
-                      2
+                      {languages.length}
                     </div>
                     <div className="text-gray-600 dark:text-gray-400 text-lg font-medium">
-                      Languages (Spanish & English)
+                      Languages ({languages.map((l) => l.name).join(" & ")})
                     </div>
                     <div className="mt-4 text-sm text-gray-500 dark:text-gray-500">
                       Bilingual communication
