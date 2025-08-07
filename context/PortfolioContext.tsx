@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { PortfolioData } from "../data/types";
 import { portfolioData } from "../data";
+import { portfolioApi, ApiError } from "../services/api";
 
 // Context interface
 interface PortfolioContextType {
@@ -14,9 +15,9 @@ interface PortfolioContextType {
   loading: boolean;
   error: string | null;
   hasApiError: boolean;
-  // Future API methods can be added here
-  // refreshPortfolio: () => Promise<void>;
-  // updatePortfolio: (data: Partial<PortfolioData>) => Promise<void>;
+  isUsingMockData: boolean;
+  refreshPortfolio: () => Promise<void>;
+  updatePortfolio: (data: Partial<PortfolioData>) => Promise<void>;
 }
 
 // Create the context
@@ -34,16 +35,71 @@ export const PortfolioProvider: React.FC<PortfolioProviderProps> = ({
   children,
 }) => {
   const [portfolio, setPortfolio] = useState<PortfolioData>(portfolioData);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hasApiError, setHasApiError] = useState(false);
+  const [isUsingMockData, setIsUsingMockData] = useState(false);
 
-  // Simulate API loading with useEffect for future migration
+  // Función para cargar datos desde la API
+  const loadPortfolioFromApi = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      setHasApiError(false);
+      setIsUsingMockData(false);
+
+      const apiData = await portfolioApi.getPortfolio();
+      setPortfolio(apiData);
+    } catch (error) {
+      console.error("Error loading portfolio from API:", error);
+
+      if (error instanceof ApiError) {
+        setError(error.message);
+        setHasApiError(true);
+      } else {
+        setError("Error inesperado al cargar el portfolio");
+        setHasApiError(true);
+      }
+
+      // Fallback a datos mock en caso de error
+      setPortfolio(portfolioData);
+      setIsUsingMockData(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Función para refrescar datos
+  const refreshPortfolio = async () => {
+    await loadPortfolioFromApi();
+  };
+
+  // Función para actualizar datos
+  const updatePortfolio = async (data: Partial<PortfolioData>) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const updatedData = await portfolioApi.updatePortfolio(data);
+      setPortfolio(updatedData);
+    } catch (error) {
+      console.error("Error updating portfolio:", error);
+
+      if (error instanceof ApiError) {
+        setError(error.message);
+      } else {
+        setError("Error inesperado al actualizar el portfolio");
+      }
+
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Cargar datos al montar el componente
   useEffect(() => {
-    // For now, we use mock data directly
-    // In the future, this could be replaced with a real API call
-    setPortfolio(portfolioData);
-    setLoading(false);
+    loadPortfolioFromApi();
   }, []);
 
   const contextValue: PortfolioContextType = {
@@ -51,6 +107,9 @@ export const PortfolioProvider: React.FC<PortfolioProviderProps> = ({
     loading,
     error,
     hasApiError,
+    isUsingMockData,
+    refreshPortfolio,
+    updatePortfolio,
   };
 
   return (

@@ -3,30 +3,31 @@ import Image from "next/image";
 import Link from "next/link";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { LoadingSpinner } from "../components/LoadingSpinner";
+import { ErrorMessage } from "../components/ErrorMessage";
+import { MockDataBanner } from "../components/MockDataBanner";
 import { usePortfolio } from "../context/PortfolioContext";
 
-// Loading component
-const LoadingSpinner = () => (
-  <div className="min-h-screen flex items-center justify-center">
-    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600"></div>
-  </div>
-);
-
-// Error component
-const ErrorMessage = ({ message }: { message: string }) => (
-  <div className="min-h-screen flex items-center justify-center">
-    <div className="text-center">
-      <h2 className="text-2xl font-bold text-red-600 mb-4">
-        Error Loading Portfolio
-      </h2>
-      <p className="text-gray-600 dark:text-gray-400">{message}</p>
-    </div>
-  </div>
-);
-
 export default function Home() {
-  const { portfolio } = usePortfolio();
+  const {
+    portfolio,
+    loading,
+    error,
+    hasApiError,
+    isUsingMockData,
+    refreshPortfolio,
+  } = usePortfolio();
   const { about, projects, languages } = portfolio;
+
+  // Mostrar loading mientras se cargan los datos
+  if (loading) {
+    return <LoadingSpinner message="Cargando portfolio..." />;
+  }
+
+  // Mostrar error si hay un problema con la API
+  if (hasApiError && error) {
+    return <ErrorMessage message={error} onRetry={refreshPortfolio} />;
+  }
 
   return (
     <>
@@ -38,6 +39,12 @@ export default function Home() {
       <Navbar />
 
       <main>
+        {/* Banner de datos mock */}
+        {isUsingMockData && (
+          <div className="container-custom pt-4">
+            <MockDataBanner onRetry={refreshPortfolio} />
+          </div>
+        )}
         {/* Hero Section */}
         <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
           {/* Background Elements */}
