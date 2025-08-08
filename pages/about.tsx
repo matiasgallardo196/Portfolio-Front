@@ -2,40 +2,41 @@ import Head from "next/head";
 import Image from "next/image";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { LoadingSpinner } from "../components/LoadingSpinner";
+import { ErrorMessage } from "../components/ErrorMessage";
+import { usePortfolio } from "../context/PortfolioContext";
 
 export default function About() {
-  const skills = {
-    languages: ["JavaScript", "TypeScript", "SQL"],
-    frontend: ["React", "Recharts", "HTML", "CSS", "TailwindCSS"],
-    backend: ["NestJS", "Node.js", "Express", "RESTful APIs"],
-    databases: ["PostgreSQL", "MongoDB"],
-    devops: ["Docker", "Vercel", "Render", "Supabase", "Git", "GitHub"],
-    integrations: ["Auth0", "Stripe", "Nodemailer", "Cloudinary", "OpenAI"],
-    practices: [
-      "Testing",
-      "Access Control",
-      "Validation",
-      "Multi-Tenant Architecture",
-    ],
-  };
+  const { portfolio, loading, error, hasApiError, refreshPortfolio } =
+    usePortfolio();
 
-  const achievements = [
-    "5 full-stack projects deployed to production with CI/CD",
-    "Experience with multi-tenant architecture, Stripe, and OpenAI integrations",
-    "Proficient in backend development with NestJS, PostgreSQL, and Docker",
-    "Designed and implemented secure REST APIs with role-based access",
-    "Hands-on deployment experience with Oracle Cloud, Render, Vercel, Netlify, Railway, Fly",
-    "Teaching Assistant at Henry bootcamp, supporting students in JavaScript, TypeScript, React, Node, NestJS",
-  ];
+  // Mostrar loading mientras se cargan los datos
+  if (loading) {
+    return <LoadingSpinner message="Cargando información..." />;
+  }
+
+  // Mostrar error si hay un problema con la API
+  if (hasApiError && error) {
+    return <ErrorMessage message={error} onRetry={refreshPortfolio} />;
+  }
+
+  // Mostrar error si no hay datos del portfolio
+  if (!portfolio) {
+    return (
+      <ErrorMessage
+        message="No se pudieron cargar los datos del portfolio"
+        onRetry={refreshPortfolio}
+      />
+    );
+  }
+
+  const { skills, achievements, about, languages } = portfolio;
 
   return (
     <>
       <Head>
-        <title>Matias Gallardo Portfolio</title>
-        <meta
-          name="description"
-          content="Learn more about Matias Gallardo's experience and skills in full stack development"
-        />
+        <title>{about.fullName} Portfolio</title>
+        <meta name="description" content={about.pageDescription} />
       </Head>
 
       <Navbar />
@@ -63,8 +64,8 @@ export default function About() {
                       <div className="relative w-56 h-56 mx-auto group">
                         <div className="absolute inset-0 bg-gradient-to-r from-primary-400 to-accent-400 dark:from-primary-500 dark:to-accent-500 rounded-full blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
                         <Image
-                          src="/avatar.jpg"
-                          alt="Matias Gallardo"
+                          src={about.avatarUrl}
+                          alt={about.fullName}
                           fill
                           className="rounded-full object-cover shadow-2xl border-4 border-white/20 dark:border-gray-700/20 floating"
                           priority
@@ -82,10 +83,10 @@ export default function About() {
                         <span className="text-2xl">📍</span>
                         <div className="flex flex-col">
                           <p className="text-lg text-gray-700 dark:text-gray-300 font-medium">
-                            Sydney, Australia
+                            {about.location}
                           </p>
                           <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
-                            Open to relocate
+                            {about.relocationStatus}
                           </p>
                         </div>
                       </div>
@@ -99,29 +100,21 @@ export default function About() {
                         My Story
                       </h2>
                       <div className="prose prose-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                        <p className="mb-6 text-xl">
-                          I&apos;m a Full Stack Web Developer with a strong
-                          Back-End orientation, passionate about building
-                          scalable systems and delivering real-world solutions
-                          with measurable impact. I graduated from Henry&apos;s
-                          intensive bootcamp and hold a Technical Analyst degree
-                          in Information Systems from UTN FRT.
-                        </p>
-                        <p className="mb-6 text-xl">
-                          I specialize in modern technologies and follow best
-                          practices in validation, testing, and secure access
-                          control through RESTful APIs. My experience includes
-                          multi-tenant platforms, Stripe integrations, GitHub
-                          Actions, and cloud deployment across various
-                          platforms.
-                        </p>
-                        <p className="text-xl">
-                          I&apos;m passionate about clean architecture,
-                          automation, and creating solutions that make a real
-                          difference. When I&apos;m not coding, I enjoy
-                          contributing to the developer community and staying
-                          updated with the latest technologies.
-                        </p>
+                        {about.biography
+                          .split("\n\n")
+                          .map((paragraph, index) => (
+                            <p
+                              key={index}
+                              className={
+                                index ===
+                                about.biography.split("\n\n").length - 1
+                                  ? "text-xl"
+                                  : "mb-6 text-xl"
+                              }
+                            >
+                              {paragraph}
+                            </p>
+                          ))}
                       </div>
                     </div>
                   </div>
@@ -138,11 +131,14 @@ export default function About() {
                     Key Achievements
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {achievements.map((achievement, index) => (
-                      <div key={index} className="flex items-start gap-3 group">
+                    {achievements.map((achievement) => (
+                      <div
+                        key={achievement.id}
+                        className="flex items-start gap-3 group"
+                      >
                         <div className="w-2 h-2 bg-green-500 rounded-full mt-3 group-hover:scale-150 transition-transform duration-300"></div>
                         <span className="text-gray-700 dark:text-gray-300 text-lg">
-                          {achievement}
+                          {achievement.description}
                         </span>
                       </div>
                     ))}
@@ -160,22 +156,25 @@ export default function About() {
                     Languages
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="flex items-center justify-between p-6 bg-white/50 dark:bg-gray-800/50 rounded-xl hover:bg-white/70 dark:hover:bg-gray-800/70 hover:scale-105 transition-all duration-300 group">
-                      <span className="text-xl font-semibold text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300">
-                        Spanish
-                      </span>
-                      <span className="text-lg text-gray-600 dark:text-gray-400 bg-green-100 dark:bg-green-900/30 px-4 py-2 rounded-full group-hover:bg-green-200 dark:group-hover:bg-green-800/40 transition-colors duration-300">
-                        Mother Tongue
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between p-6 bg-white/50 dark:bg-gray-800/50 rounded-xl hover:bg-white/70 dark:hover:bg-gray-800/70 hover:scale-105 transition-all duration-300 group">
-                      <span className="text-xl font-semibold text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300">
-                        English
-                      </span>
-                      <span className="text-lg text-gray-600 dark:text-gray-400 bg-blue-100 dark:bg-blue-900/30 px-4 py-2 rounded-full group-hover:bg-blue-200 dark:group-hover:bg-blue-800/40 transition-colors duration-300">
-                        C1 Level
-                      </span>
-                    </div>
+                    {languages.map((language) => (
+                      <div
+                        key={language.name}
+                        className="flex items-center justify-between p-6 bg-white/50 dark:bg-gray-800/50 rounded-xl hover:bg-white/70 dark:hover:bg-gray-800/70 hover:scale-105 transition-all duration-300 group"
+                      >
+                        <span className="text-xl font-semibold text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300">
+                          {language.name}
+                        </span>
+                        <span
+                          className={`text-lg text-gray-600 dark:text-gray-400 px-4 py-2 rounded-full transition-colors duration-300 ${
+                            language.isNative
+                              ? "bg-green-100 dark:bg-green-900/30 group-hover:bg-green-200 dark:group-hover:bg-green-800/40"
+                              : "bg-blue-100 dark:bg-blue-900/30 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/40"
+                          }`}
+                        >
+                          {language.level}
+                        </span>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -206,12 +205,12 @@ export default function About() {
                         Languages
                       </h3>
                       <div className="flex flex-wrap gap-2">
-                        {skills.languages.map((skill, index) => (
+                        {skills.languages.map((skill) => (
                           <span
-                            key={index}
+                            key={skill.id}
                             className="px-4 py-2 bg-gradient-to-r from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 text-blue-800 dark:text-blue-300 text-sm font-semibold rounded-full border border-blue-200 dark:border-blue-700/30 hover:scale-105 transition-transform duration-200"
                           >
-                            {skill}
+                            {skill.name}
                           </span>
                         ))}
                       </div>
@@ -232,12 +231,12 @@ export default function About() {
                         Frontend
                       </h3>
                       <div className="flex flex-wrap gap-2">
-                        {skills.frontend.map((skill, index) => (
+                        {skills.frontend.map((skill) => (
                           <span
-                            key={index}
+                            key={skill.id}
                             className="px-4 py-2 bg-gradient-to-r from-green-100 to-green-200 dark:from-green-900/30 dark:to-green-800/30 text-green-800 dark:text-green-300 text-sm font-semibold rounded-full border border-green-200 dark:border-green-700/30 hover:scale-105 transition-transform duration-200"
                           >
-                            {skill}
+                            {skill.name}
                           </span>
                         ))}
                       </div>
@@ -258,12 +257,12 @@ export default function About() {
                         Backend
                       </h3>
                       <div className="flex flex-wrap gap-2">
-                        {skills.backend.map((skill, index) => (
+                        {skills.backend.map((skill) => (
                           <span
-                            key={index}
+                            key={skill.id}
                             className="px-4 py-2 bg-gradient-to-r from-purple-100 to-purple-200 dark:from-purple-900/30 dark:to-purple-800/30 text-purple-800 dark:text-purple-300 text-sm font-semibold rounded-full border border-purple-200 dark:border-purple-700/30 hover:scale-105 transition-transform duration-200"
                           >
-                            {skill}
+                            {skill.name}
                           </span>
                         ))}
                       </div>
@@ -284,12 +283,12 @@ export default function About() {
                         Databases
                       </h3>
                       <div className="flex flex-wrap gap-2">
-                        {skills.databases.map((skill, index) => (
+                        {skills.databases.map((skill) => (
                           <span
-                            key={index}
+                            key={skill.id}
                             className="px-4 py-2 bg-gradient-to-r from-orange-100 to-orange-200 dark:from-orange-900/30 dark:to-orange-800/30 text-orange-800 dark:text-orange-300 text-sm font-semibold rounded-full border border-orange-200 dark:border-orange-700/30 hover:scale-105 transition-transform duration-200"
                           >
-                            {skill}
+                            {skill.name}
                           </span>
                         ))}
                       </div>
@@ -310,12 +309,12 @@ export default function About() {
                         DevOps & Tools
                       </h3>
                       <div className="flex flex-wrap gap-2">
-                        {skills.devops.map((skill, index) => (
+                        {skills.devops.map((skill) => (
                           <span
-                            key={index}
+                            key={skill.id}
                             className="px-4 py-2 bg-gradient-to-r from-indigo-100 to-indigo-200 dark:from-indigo-900/30 dark:to-indigo-800/30 text-indigo-800 dark:text-indigo-300 text-sm font-semibold rounded-full border border-indigo-200 dark:border-indigo-700/30 hover:scale-105 transition-transform duration-200"
                           >
-                            {skill}
+                            {skill.name}
                           </span>
                         ))}
                       </div>
@@ -336,12 +335,12 @@ export default function About() {
                         Integrations
                       </h3>
                       <div className="flex flex-wrap gap-2">
-                        {skills.integrations.map((skill, index) => (
+                        {skills.integrations.map((skill) => (
                           <span
-                            key={index}
+                            key={skill.id}
                             className="px-4 py-2 bg-gradient-to-r from-pink-100 to-pink-200 dark:from-pink-900/30 dark:to-pink-800/30 text-pink-800 dark:text-pink-300 text-sm font-semibold rounded-full border border-pink-200 dark:border-pink-700/30 hover:scale-105 transition-transform duration-200"
                           >
-                            {skill}
+                            {skill.name}
                           </span>
                         ))}
                       </div>
@@ -354,12 +353,12 @@ export default function About() {
                       Best Practices & Architecture
                     </h3>
                     <div className="flex flex-wrap gap-3">
-                      {skills.practices.map((skill, index) => (
+                      {skills.practices.map((skill) => (
                         <span
-                          key={index}
+                          key={skill.id}
                           className="px-4 py-2 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-800/30 dark:to-gray-700/30 text-gray-800 dark:text-gray-300 text-sm font-semibold rounded-full border border-gray-200 dark:border-gray-600/30 hover:scale-105 transition-transform duration-200"
                         >
-                          {skill}
+                          {skill.name}
                         </span>
                       ))}
                     </div>

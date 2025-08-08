@@ -1,6 +1,7 @@
 import type { AppProps } from "next/app";
 import "../styles/globals.css";
 import { createContext, useContext, useEffect, useState } from "react";
+import { PortfolioProvider } from "../context/PortfolioContext";
 
 // Contexto para el tema
 type Theme = "light" | "dark";
@@ -36,6 +37,15 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
     document.documentElement.classList.toggle("dark", initialTheme === "dark");
   }, []);
 
+  useEffect(() => {
+    // Aplicar estilos del tema centralizado usando el contexto
+    const root = document.documentElement;
+    // These will be set dynamically when the portfolio context is available
+    root.style.setProperty("--transition-normal", "300ms ease-in-out");
+    root.style.setProperty("--border-radius-lg", "0.75rem");
+    root.style.setProperty("--z-index-navbar", "50");
+  }, []);
+
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
@@ -52,8 +62,10 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <ThemeProvider>
-      <Component {...pageProps} />
-    </ThemeProvider>
+    <PortfolioProvider>
+      <ThemeProvider>
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </PortfolioProvider>
   );
 }
