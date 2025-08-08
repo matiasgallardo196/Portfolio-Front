@@ -6,15 +6,16 @@ import React, {
   useEffect,
 } from "react";
 import { PortfolioData } from "../data/types";
+import { portfolioApi, ApiError } from "../services/api";
 
 // Context interface
 interface PortfolioContextType {
   portfolio: PortfolioData | null;
   loading: boolean;
   error: string | null;
-  // Future API methods can be added here
-  // refreshPortfolio: () => Promise<void>;
-  // updatePortfolio: (data: Partial<PortfolioData>) => Promise<void>;
+  hasApiError: boolean;
+  refreshPortfolio: () => Promise<void>;
+  updatePortfolio: (data: Partial<PortfolioData>) => Promise<void>;
 }
 
 // Create the context
@@ -34,38 +35,75 @@ export const PortfolioProvider: React.FC<PortfolioProviderProps> = ({
   const [portfolio, setPortfolio] = useState<PortfolioData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [hasApiError, setHasApiError] = useState(false);
 
-  useEffect(() => {
-    const fetchPortfolio = async () => {
-      try {
-        setLoading(true);
-        setError(null);
+  // Función para cargar datos desde la API
+  const loadPortfolioFromApi = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      setHasApiError(false);
 
-        const response = await fetch("http://localhost:3001/api/portfolio");
+      const apiData = await portfolioApi.getPortfolio();
+      setPortfolio(apiData);
+    } catch (error) {
+      console.error("Error loading portfolio from API:", error);
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data: PortfolioData = await response.json();
-        setPortfolio(data);
-      } catch (err) {
-        console.error("Failed to fetch portfolio data:", err);
-        setError(
-          err instanceof Error ? err.message : "Failed to fetch portfolio data"
-        );
-      } finally {
-        setLoading(false);
+      if (error instanceof ApiError) {
+        setError(error.message);
+        setHasApiError(true);
+      } else {
+        setError("Error inesperado al cargar el portfolio");
+        setHasApiError(true);
       }
-    };
 
-    fetchPortfolio();
+      // No usar datos mock - mantener portfolio como null
+      setPortfolio(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Función para refrescar datos
+  const refreshPortfolio = async () => {
+    await loadPortfolioFromApi();
+  };
+
+  // Función para actualizar datos
+  const updatePortfolio = async (data: Partial<PortfolioData>) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const updatedData = await portfolioApi.updatePortfolio(data);
+      setPortfolio(updatedData);
+    } catch (error) {
+      console.error("Error updating portfolio:", error);
+
+      if (error instanceof ApiError) {
+        setError(error.message);
+      } else {
+        setError("Error inesperado al actualizar el portfolio");
+      }
+
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Cargar datos al montar el componente
+  useEffect(() => {
+    loadPortfolioFromApi();
   }, []);
 
   const contextValue: PortfolioContextType = {
     portfolio,
     loading,
     error,
+    hasApiError,
+    refreshPortfolio,
+    updatePortfolio,
   };
 
   return (

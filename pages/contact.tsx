@@ -1,46 +1,35 @@
 import Head from "next/head";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { LoadingSpinner } from "../components/LoadingSpinner";
+import { ErrorMessage } from "../components/ErrorMessage";
 import { usePortfolio } from "../context/PortfolioContext";
 
-// Loading component
-const LoadingSpinner = () => (
-  <div className="min-h-screen flex items-center justify-center">
-    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600"></div>
-  </div>
-);
-
-// Error component
-const ErrorMessage = ({ message }: { message: string }) => (
-  <div className="min-h-screen flex items-center justify-center">
-    <div className="text-center">
-      <h2 className="text-2xl font-bold text-red-600 mb-4">
-        Error Loading Contact
-      </h2>
-      <p className="text-gray-600 dark:text-gray-400">{message}</p>
-    </div>
-  </div>
-);
-
 export default function Contact() {
-  const { portfolio, loading, error } = usePortfolio();
+  const { portfolio, loading, error, hasApiError, refreshPortfolio } =
+    usePortfolio();
 
-  // Show loading spinner while data is being fetched
+  // Mostrar loading mientras se cargan los datos
   if (loading) {
-    return <LoadingSpinner />;
+    return <LoadingSpinner message="Cargando información de contacto..." />;
   }
 
-  // Show error message if there's an error
-  if (error) {
-    return <ErrorMessage message={error} />;
+  // Mostrar error si hay un problema con la API
+  if (hasApiError && error) {
+    return <ErrorMessage message={error} onRetry={refreshPortfolio} />;
   }
 
-  // Show loading spinner if portfolio is still null
+  // Mostrar error si no hay datos del portfolio
   if (!portfolio) {
-    return <LoadingSpinner />;
+    return (
+      <ErrorMessage
+        message="No se pudieron cargar los datos del portfolio"
+        onRetry={refreshPortfolio}
+      />
+    );
   }
 
-  const { contact } = portfolio;
+  const { contact, about } = portfolio;
 
   const contactInfo = [
     {
@@ -88,11 +77,8 @@ export default function Contact() {
   return (
     <>
       <Head>
-        <title>Matias Gallardo Portfolio</title>
-        <meta
-          name="description"
-          content="Contact information and social media links for Matias Gallardo"
-        />
+        <title>{about.fullName} Portfolio</title>
+        <meta name="description" content={contact.metaDescription} />
       </Head>
 
       <Navbar />
@@ -106,7 +92,7 @@ export default function Contact() {
         <section className="py-20 relative z-10">
           <div className="container-custom">
             <div className="text-center mb-16 animate-fade-in">
-              <h1 className="section-title mb-6">Let&apos;s Connect</h1>
+              <h1 className="section-title mb-6">{contact.heroTitle}</h1>
             </div>
 
             <div className="max-w-6xl mx-auto">
@@ -147,13 +133,10 @@ export default function Contact() {
                 >
                   <div className="glass-card p-8 h-full">
                     <h2 className="text-3xl font-bold gradient-text mb-6">
-                      Let&apos;s Talk!
+                      {contact.letsTalkTitle}
                     </h2>
                     <p className="text-xl text-gray-700 dark:text-gray-300 leading-relaxed mb-8">
-                      I&apos;m always interested in new opportunities,
-                      interesting collaborations, and challenging projects.
-                      Don&apos;t hesitate to reach out if you want to work
-                      together or just chat about technology.
+                      {contact.letsTalkDescription}
                     </p>
 
                     <div className="flex items-center gap-4">
@@ -172,28 +155,24 @@ export default function Contact() {
                 >
                   <div className="glass-card p-8 h-full">
                     <h2 className="text-3xl font-bold gradient-text mb-8">
-                      Availability
+                      {contact.availabilityTitle}
                     </h2>
 
                     <div className="space-y-8">
                       {/* Current Status */}
                       <div>
                         <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                          Current Status
+                          {contact.currentStatusTitle}
                         </h3>
                         <div className="space-y-3">
-                          {[
-                            "Full-time opportunities",
-                            "Freelance projects",
-                            "Open source collaborations",
-                          ].map((item, index) => (
+                          {contact.opportunities.map((item) => (
                             <div
-                              key={index}
+                              key={item.id}
                               className="flex items-center gap-3"
                             >
                               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                               <span className="text-gray-700 dark:text-gray-300">
-                                {item}
+                                {item.name}
                               </span>
                             </div>
                           ))}
@@ -203,27 +182,20 @@ export default function Contact() {
                       {/* Location */}
                       <div>
                         <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                          Location & Relocation
+                          {contact.locationTitle}
                         </h3>
                         <div className="space-y-3">
-                          <div className="flex items-center gap-3">
-                            <div className="w-2 h-2 bg-primary-500 dark:bg-primary-400 rounded-full"></div>
-                            <span className="text-gray-700 dark:text-gray-300">
-                              Based in Sydney, Australia
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <div className="w-2 h-2 bg-primary-500 dark:bg-primary-400 rounded-full"></div>
-                            <span className="text-gray-700 dark:text-gray-300">
-                              Open to relocate within Australia
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <div className="w-2 h-2 bg-primary-500 dark:bg-primary-400 rounded-full"></div>
-                            <span className="text-gray-700 dark:text-gray-300">
-                              Available for remote work
-                            </span>
-                          </div>
+                          {contact.locationInfo.map((item) => (
+                            <div
+                              key={item.id}
+                              className="flex items-center gap-3"
+                            >
+                              <div className="w-2 h-2 bg-primary-500 dark:bg-primary-400 rounded-full"></div>
+                              <span className="text-gray-700 dark:text-gray-300">
+                                {item.name}
+                              </span>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     </div>

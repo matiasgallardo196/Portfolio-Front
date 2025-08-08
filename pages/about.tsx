@@ -2,43 +2,32 @@ import Head from "next/head";
 import Image from "next/image";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { LoadingSpinner } from "../components/LoadingSpinner";
+import { ErrorMessage } from "../components/ErrorMessage";
 import { usePortfolio } from "../context/PortfolioContext";
 
-// Loading component
-const LoadingSpinner = () => (
-  <div className="min-h-screen flex items-center justify-center">
-    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600"></div>
-  </div>
-);
-
-// Error component
-const ErrorMessage = ({ message }: { message: string }) => (
-  <div className="min-h-screen flex items-center justify-center">
-    <div className="text-center">
-      <h2 className="text-2xl font-bold text-red-600 mb-4">
-        Error Loading About
-      </h2>
-      <p className="text-gray-600 dark:text-gray-400">{message}</p>
-    </div>
-  </div>
-);
-
 export default function About() {
-  const { portfolio, loading, error } = usePortfolio();
+  const { portfolio, loading, error, hasApiError, refreshPortfolio } =
+    usePortfolio();
 
-  // Show loading spinner while data is being fetched
+  // Mostrar loading mientras se cargan los datos
   if (loading) {
-    return <LoadingSpinner />;
+    return <LoadingSpinner message="Cargando información..." />;
   }
 
-  // Show error message if there's an error
-  if (error) {
-    return <ErrorMessage message={error} />;
+  // Mostrar error si hay un problema con la API
+  if (hasApiError && error) {
+    return <ErrorMessage message={error} onRetry={refreshPortfolio} />;
   }
 
-  // Show loading spinner if portfolio is still null
+  // Mostrar error si no hay datos del portfolio
   if (!portfolio) {
-    return <LoadingSpinner />;
+    return (
+      <ErrorMessage
+        message="No se pudieron cargar los datos del portfolio"
+        onRetry={refreshPortfolio}
+      />
+    );
   }
 
   const { skills, achievements, about, languages } = portfolio;
@@ -46,11 +35,8 @@ export default function About() {
   return (
     <>
       <Head>
-        <title>Matias Gallardo Portfolio</title>
-        <meta
-          name="description"
-          content="Learn more about Matias Gallardo's experience and skills in full stack development"
-        />
+        <title>{about.fullName} Portfolio</title>
+        <meta name="description" content={about.pageDescription} />
       </Head>
 
       <Navbar />
@@ -78,7 +64,7 @@ export default function About() {
                       <div className="relative w-56 h-56 mx-auto group">
                         <div className="absolute inset-0 bg-gradient-to-r from-primary-400 to-accent-400 dark:from-primary-500 dark:to-accent-500 rounded-full blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
                         <Image
-                          src="/avatar.jpg"
+                          src={about.avatarUrl}
                           alt={about.fullName}
                           fill
                           className="rounded-full object-cover shadow-2xl border-4 border-white/20 dark:border-gray-700/20 floating"
@@ -100,7 +86,7 @@ export default function About() {
                             {about.location}
                           </p>
                           <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
-                            Open to relocate
+                            {about.relocationStatus}
                           </p>
                         </div>
                       </div>
@@ -219,12 +205,12 @@ export default function About() {
                         Languages
                       </h3>
                       <div className="flex flex-wrap gap-2">
-                        {skills.languages.map((skill, index) => (
+                        {skills.languages.map((skill) => (
                           <span
-                            key={index}
+                            key={skill.id}
                             className="px-4 py-2 bg-gradient-to-r from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 text-blue-800 dark:text-blue-300 text-sm font-semibold rounded-full border border-blue-200 dark:border-blue-700/30 hover:scale-105 transition-transform duration-200"
                           >
-                            {skill}
+                            {skill.name}
                           </span>
                         ))}
                       </div>
@@ -245,12 +231,12 @@ export default function About() {
                         Frontend
                       </h3>
                       <div className="flex flex-wrap gap-2">
-                        {skills.frontend.map((skill, index) => (
+                        {skills.frontend.map((skill) => (
                           <span
-                            key={index}
+                            key={skill.id}
                             className="px-4 py-2 bg-gradient-to-r from-green-100 to-green-200 dark:from-green-900/30 dark:to-green-800/30 text-green-800 dark:text-green-300 text-sm font-semibold rounded-full border border-green-200 dark:border-green-700/30 hover:scale-105 transition-transform duration-200"
                           >
-                            {skill}
+                            {skill.name}
                           </span>
                         ))}
                       </div>
@@ -271,12 +257,12 @@ export default function About() {
                         Backend
                       </h3>
                       <div className="flex flex-wrap gap-2">
-                        {skills.backend.map((skill, index) => (
+                        {skills.backend.map((skill) => (
                           <span
-                            key={index}
+                            key={skill.id}
                             className="px-4 py-2 bg-gradient-to-r from-purple-100 to-purple-200 dark:from-purple-900/30 dark:to-purple-800/30 text-purple-800 dark:text-purple-300 text-sm font-semibold rounded-full border border-purple-200 dark:border-purple-700/30 hover:scale-105 transition-transform duration-200"
                           >
-                            {skill}
+                            {skill.name}
                           </span>
                         ))}
                       </div>
@@ -297,12 +283,12 @@ export default function About() {
                         Databases
                       </h3>
                       <div className="flex flex-wrap gap-2">
-                        {skills.databases.map((skill, index) => (
+                        {skills.databases.map((skill) => (
                           <span
-                            key={index}
+                            key={skill.id}
                             className="px-4 py-2 bg-gradient-to-r from-orange-100 to-orange-200 dark:from-orange-900/30 dark:to-orange-800/30 text-orange-800 dark:text-orange-300 text-sm font-semibold rounded-full border border-orange-200 dark:border-orange-700/30 hover:scale-105 transition-transform duration-200"
                           >
-                            {skill}
+                            {skill.name}
                           </span>
                         ))}
                       </div>
@@ -323,12 +309,12 @@ export default function About() {
                         DevOps & Tools
                       </h3>
                       <div className="flex flex-wrap gap-2">
-                        {skills.devops.map((skill, index) => (
+                        {skills.devops.map((skill) => (
                           <span
-                            key={index}
+                            key={skill.id}
                             className="px-4 py-2 bg-gradient-to-r from-indigo-100 to-indigo-200 dark:from-indigo-900/30 dark:to-indigo-800/30 text-indigo-800 dark:text-indigo-300 text-sm font-semibold rounded-full border border-indigo-200 dark:border-indigo-700/30 hover:scale-105 transition-transform duration-200"
                           >
-                            {skill}
+                            {skill.name}
                           </span>
                         ))}
                       </div>
@@ -349,12 +335,12 @@ export default function About() {
                         Integrations
                       </h3>
                       <div className="flex flex-wrap gap-2">
-                        {skills.integrations.map((skill, index) => (
+                        {skills.integrations.map((skill) => (
                           <span
-                            key={index}
+                            key={skill.id}
                             className="px-4 py-2 bg-gradient-to-r from-pink-100 to-pink-200 dark:from-pink-900/30 dark:to-pink-800/30 text-pink-800 dark:text-pink-300 text-sm font-semibold rounded-full border border-pink-200 dark:border-pink-700/30 hover:scale-105 transition-transform duration-200"
                           >
-                            {skill}
+                            {skill.name}
                           </span>
                         ))}
                       </div>
@@ -367,12 +353,12 @@ export default function About() {
                       Best Practices & Architecture
                     </h3>
                     <div className="flex flex-wrap gap-3">
-                      {skills.practices.map((skill, index) => (
+                      {skills.practices.map((skill) => (
                         <span
-                          key={index}
+                          key={skill.id}
                           className="px-4 py-2 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-800/30 dark:to-gray-700/30 text-gray-800 dark:text-gray-300 text-sm font-semibold rounded-full border border-gray-200 dark:border-gray-600/30 hover:scale-105 transition-transform duration-200"
                         >
-                          {skill}
+                          {skill.name}
                         </span>
                       ))}
                     </div>

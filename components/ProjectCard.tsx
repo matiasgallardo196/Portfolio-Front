@@ -1,10 +1,11 @@
 import React from "react";
 import Image from "next/image";
+import { SkillItem } from "../data/types";
 
 interface ProjectCardProps {
   title: string;
   description: string;
-  technologies: string[];
+  technologies: SkillItem[];
   githubUrl?: string;
   demoUrl?: string;
   imageUrl?: string;
@@ -68,12 +69,12 @@ const ProjectCard = ({
           {/* Technologies */}
           <div className="mb-6">
             <div className="flex flex-wrap gap-2">
-              {technologies.map((tech, index) => (
+              {technologies.map((tech) => (
                 <span
-                  key={index}
+                  key={tech.id}
                   className="px-4 py-2 bg-gradient-to-r from-primary-100 to-accent-100 dark:from-primary-900/30 dark:to-accent-900/30 text-primary-700 dark:text-primary-300 text-sm font-semibold rounded-full border border-primary-200/50 dark:border-primary-700/30 hover:scale-105 transition-transform duration-200"
                 >
-                  {tech}
+                  {tech.name}
                 </span>
               ))}
             </div>

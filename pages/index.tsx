@@ -3,55 +3,70 @@ import Image from "next/image";
 import Link from "next/link";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { LoadingSpinner } from "../components/LoadingSpinner";
+import { ErrorMessage } from "../components/ErrorMessage";
 import { usePortfolio } from "../context/PortfolioContext";
 
-// Loading component
-const LoadingSpinner = () => (
-  <div className="min-h-screen flex items-center justify-center">
-    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600"></div>
-  </div>
-);
-
-// Error component
-const ErrorMessage = ({ message }: { message: string }) => (
-  <div className="min-h-screen flex items-center justify-center">
-    <div className="text-center">
-      <h2 className="text-2xl font-bold text-red-600 mb-4">
-        Error Loading Portfolio
-      </h2>
-      <p className="text-gray-600 dark:text-gray-400">{message}</p>
-    </div>
-  </div>
-);
-
 export default function Home() {
-  const { portfolio, loading, error } = usePortfolio();
+  const { portfolio, loading, error, hasApiError, refreshPortfolio } =
+    usePortfolio();
 
-  // Show loading spinner while data is being fetched
+  // Mostrar loading mientras se cargan los datos
   if (loading) {
-    return <LoadingSpinner />;
+    return <LoadingSpinner message="Cargando portfolio..." />;
   }
 
-  // Show error message if there's an error
-  if (error) {
-    return <ErrorMessage message={error} />;
+  // Mostrar error si hay un problema con la API
+  if (hasApiError && error) {
+    return <ErrorMessage message={error} onRetry={refreshPortfolio} />;
   }
 
-  // Show loading spinner if portfolio is still null
+  // Mostrar error si no hay datos del portfolio
   if (!portfolio) {
-    return <LoadingSpinner />;
+    return (
+      <ErrorMessage
+        message="No se pudieron cargar los datos del portfolio"
+        onRetry={refreshPortfolio}
+      />
+    );
   }
 
-  const { about, projects, languages } = portfolio;
+  const { about, projects, languages, skills } = portfolio;
+
+  // Validaciones de seguridad para propiedades que pueden ser undefined
+  const safeAbout = about || {
+    fullName: "Portfolio",
+    metaDescription: "Portfolio personal",
+    heroTitle: "Desarrollador Full Stack",
+    heroSubtitle: "Apasionado por crear experiencias digitales únicas",
+    ctaButtons: {
+      projects: "Ver Proyectos",
+      contact: "Contactar",
+    },
+    stats: {
+      projects: { title: "Proyectos", subtitle: "Completados" },
+      technologies: { title: "Tecnologías", subtitle: "Dominadas" },
+      languages: { title: "Idiomas", subtitle: "Fluidez" },
+    },
+  };
+
+  const safeProjects = projects || [];
+  const safeLanguages = languages || [];
+  const safeSkills = skills || {
+    languages: [],
+    frontend: [],
+    backend: [],
+    databases: [],
+    devops: [],
+    integrations: [],
+    practices: [],
+  };
 
   return (
     <>
       <Head>
-        <title>Matias Gallardo Portfolio</title>
-        <meta
-          name="description"
-          content="Full Stack Web Developer with strong Back-End orientation. Specialized in NestJS, TypeScript, PostgreSQL, and scalable systems. Based in Sydney, Australia."
-        />
+        <title>{safeAbout.fullName} Portfolio</title>
+        <meta name="description" content={safeAbout.metaDescription} />
       </Head>
 
       <Navbar />
@@ -76,12 +91,12 @@ export default function Home() {
               {/* Name and Title */}
               <div className="animate-slide-up">
                 <h1 className="text-6xl md:text-7xl font-bold mb-6 gradient-text">
-                  {about.fullName}
+                  {safeAbout.fullName}
                 </h1>
                 <h2 className="text-2xl md:text-3xl text-gray-700 dark:text-gray-300 font-semibold mb-8">
-                  Full Stack Web Developer
+                  {safeAbout.heroTitle}
                   <span className="block text-lg text-primary-600 dark:text-primary-400 font-medium mt-2">
-                    Back-End Oriented
+                    {safeAbout.heroSubtitle}
                   </span>
                 </h2>
               </div>
@@ -96,7 +111,7 @@ export default function Home() {
                   className="btn-primary text-lg px-10 py-4 group"
                 >
                   <span className="flex items-center gap-2">
-                    Checkout My Work
+                    {safeAbout.ctaButtons.projects}
                     <svg
                       className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
                       fill="none"
@@ -117,7 +132,7 @@ export default function Home() {
                   className="btn-secondary text-lg px-10 py-4 group"
                 >
                   <span className="flex items-center gap-2">
-                    Contact Me
+                    {safeAbout.ctaButtons.contact}
                     <svg
                       className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
                       fill="none"
@@ -143,35 +158,36 @@ export default function Home() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   <div className="card hover-lift text-center group">
                     <div className="text-5xl font-bold gradient-text mb-4 group-hover:scale-110 transition-transform duration-300">
-                      {projects.length}+
+                      {safeProjects.length}+
                     </div>
                     <div className="text-gray-600 dark:text-gray-400 text-lg font-medium">
-                      Full-Stack Projects Deployed
+                      {safeAbout.stats.projects.title}
                     </div>
                     <div className="mt-4 text-sm text-gray-500 dark:text-gray-500">
-                      Production-ready applications
+                      {safeAbout.stats.projects.subtitle}
                     </div>
                   </div>
                   <div className="card hover-lift text-center group">
                     <div className="text-5xl font-bold gradient-text mb-4 group-hover:scale-110 transition-transform duration-300">
-                      {Object.values(portfolio.skills).flat().length}+
+                      {Object.values(safeSkills).flat().length}+
                     </div>
                     <div className="text-gray-600 dark:text-gray-400 text-lg font-medium">
-                      Technologies Mastered
+                      {safeAbout.stats.technologies.title}
                     </div>
                     <div className="mt-4 text-sm text-gray-500 dark:text-gray-500">
-                      Modern stack expertise
+                      {safeAbout.stats.technologies.subtitle}
                     </div>
                   </div>
                   <div className="card hover-lift text-center group">
                     <div className="text-5xl font-bold gradient-text mb-4 group-hover:scale-110 transition-transform duration-300">
-                      {languages.length}
+                      {safeLanguages.length}
                     </div>
                     <div className="text-gray-600 dark:text-gray-400 text-lg font-medium">
-                      Languages ({languages.map((l) => l.name).join(" & ")})
+                      {safeAbout.stats.languages.title} (
+                      {safeLanguages.map((l) => l.name).join(" & ")})
                     </div>
                     <div className="mt-4 text-sm text-gray-500 dark:text-gray-500">
-                      Bilingual communication
+                      {safeAbout.stats.languages.subtitle}
                     </div>
                   </div>
                 </div>

@@ -11,6 +11,7 @@ export { themeData } from "./theme";
 export type {
   About,
   SkillCategory,
+  SkillItem,
   Achievement,
   Language,
   Project,
@@ -28,7 +29,7 @@ import { projectsData } from "./projects";
 import { contactData } from "./contact";
 import { themeData } from "./theme";
 
-export const portfolioData: PortfolioData = {
+export const portfolioData = {
   about: aboutData,
   skills: skillsData,
   achievements: achievementsData,

@@ -2,16 +2,45 @@ export interface About {
   fullName: string;
   location: string;
   biography: string;
+  pageDescription: string;
+  metaDescription: string;
+  heroTitle: string;
+  heroSubtitle: string;
+  avatarUrl: string;
+  relocationStatus: string;
+  ctaButtons: {
+    projects: string;
+    contact: string;
+  };
+  stats: {
+    projects: {
+      title: string;
+      subtitle: string;
+    };
+    technologies: {
+      title: string;
+      subtitle: string;
+    };
+    languages: {
+      title: string;
+      subtitle: string;
+    };
+  };
+}
+
+export interface SkillItem {
+  id: string;
+  name: string;
 }
 
 export interface SkillCategory {
-  languages: string[];
-  frontend: string[];
-  backend: string[];
-  databases: string[];
-  devops: string[];
-  integrations: string[];
-  practices: string[];
+  languages: SkillItem[];
+  frontend: SkillItem[];
+  backend: SkillItem[];
+  databases: SkillItem[];
+  devops: SkillItem[];
+  integrations: SkillItem[];
+  practices: SkillItem[];
 }
 
 export interface Achievement {
@@ -20,6 +49,7 @@ export interface Achievement {
 }
 
 export interface Language {
+  id: string;
   name: string;
   level: string;
   isNative?: boolean;
@@ -29,7 +59,7 @@ export interface Project {
   id: string;
   title: string;
   description: string;
-  technologies: string[];
+  technologies: SkillItem[];
   githubUrl: string;
   demoUrl?: string;
   imageUrl: string;
@@ -40,6 +70,16 @@ export interface ContactInfo {
   linkedin: string;
   github: string;
   whatsapp?: string;
+  metaDescription: string;
+  pageTitle: string;
+  heroTitle: string;
+  letsTalkTitle: string;
+  letsTalkDescription: string;
+  availabilityTitle: string;
+  currentStatusTitle: string;
+  opportunities: SkillItem[];
+  locationTitle: string;
+  locationInfo: SkillItem[];
 }
 
 // Import ThemeData interface from theme.ts
