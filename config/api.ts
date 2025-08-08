@@ -14,6 +14,11 @@ export const API_CONFIG = {
   // Endpoints
   ENDPOINTS: {
     PORTFOLIO: "/portfolio",
+    AUTH: {
+      LOGIN: "/auth/login",
+      REGISTER: "/auth/register",
+      VALIDATE: "/auth/validate",
+    },
   },
 } as const;
 

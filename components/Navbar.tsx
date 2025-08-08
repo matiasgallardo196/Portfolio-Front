@@ -3,12 +3,14 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import ThemeToggle from "./ThemeToggle";
 import { usePortfolio } from "../context/PortfolioContext";
+import { useAuth } from "../context/AuthContext";
 import { themeData } from "../data/theme";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const { portfolio } = usePortfolio();
+  const { user, logout } = useAuth();
 
   // Si no hay portfolio, no renderizar nada (la página mostrará error)
   if (!portfolio) {
@@ -33,6 +35,16 @@ const Navbar = () => {
     { href: "/projects", label: "Projects" },
     { href: "/contact", label: "Contact" },
   ];
+
+  const authItems = user
+    ? [
+        { href: "/dashboard", label: "Dashboard" },
+        { action: logout, label: "Sign Out" },
+      ]
+    : [
+        { href: "/login", label: "Sign In" },
+        { href: "/register", label: "Sign Up" },
+      ];
 
   const isActive = (href: string) => router.pathname === href;
 
@@ -78,6 +90,36 @@ const Navbar = () => {
                 ></span>
               </Link>
             ))}
+
+            {/* Auth Items */}
+            {authItems.map((item) =>
+              item.action ? (
+                <button
+                  key={item.label}
+                  onClick={item.action}
+                  className="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300"
+                >
+                  {item.label}
+                </button>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`relative group ${
+                    isActive(item.href)
+                      ? "text-primary-600 dark:text-primary-400 font-semibold"
+                      : "text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400"
+                  } transition-all duration-300`}
+                >
+                  {item.label}
+                  <span
+                    className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary-600 to-accent-600 group-hover:w-full transition-all duration-300 ${
+                      isActive(item.href) ? "w-full" : ""
+                    }`}
+                  ></span>
+                </Link>
+              )
+            )}
 
             {/* Theme Toggle */}
             <ThemeToggle />
@@ -135,6 +177,44 @@ const Navbar = () => {
                   {item.label}
                 </Link>
               ))}
+
+              {/* Divider */}
+              <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+
+              {/* Auth Items */}
+              {authItems.map((item, index) =>
+                item.action ? (
+                  <button
+                    key={item.label}
+                    onClick={() => {
+                      item.action();
+                      setIsOpen(false);
+                    }}
+                    className="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50/50 dark:hover:bg-gray-800/50 block w-full text-left px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 transform hover:translate-x-2"
+                    style={{
+                      animationDelay: `${(navItems.length + index) * 0.1}s`,
+                    }}
+                  >
+                    {item.label}
+                  </button>
+                ) : (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`${
+                      isActive(item.href)
+                        ? "text-primary-600 dark:text-primary-400 bg-primary-50/50 dark:bg-primary-900/20 border-l-4 border-primary-600 dark:border-primary-400"
+                        : "text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50/50 dark:hover:bg-gray-800/50"
+                    } block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 transform hover:translate-x-2`}
+                    onClick={() => setIsOpen(false)}
+                    style={{
+                      animationDelay: `${(navItems.length + index) * 0.1}s`,
+                    }}
+                  >
+                    {item.label}
+                  </Link>
+                )
+              )}
             </div>
           </div>
         )}

@@ -4,7 +4,7 @@ interface ErrorMessageProps {
   showRetryButton?: boolean;
 }
 
-export const ErrorMessage: React.FC<ErrorMessageProps> = ({
+const ErrorMessage: React.FC<ErrorMessageProps> = ({
   message,
   onRetry,
   showRetryButton = true,
@@ -29,7 +29,7 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({
         </div>
 
         <h2 className="text-2xl font-bold text-red-600 mb-4">
-          Error al Cargar el Portfolio
+          Portfolio Loading Error
         </h2>
 
         <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
@@ -41,10 +41,12 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({
             onClick={onRetry}
             className="bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
           >
-            Intentar de Nuevo
+            Try Again
           </button>
         )}
       </div>
     </div>
   );
 };
+
+export default ErrorMessage;

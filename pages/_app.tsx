@@ -2,6 +2,7 @@ import type { AppProps } from "next/app";
 import "../styles/globals.css";
 import { createContext, useContext, useEffect, useState } from "react";
 import { PortfolioProvider } from "../context/PortfolioContext";
+import { AuthProvider } from "../context/AuthContext";
 
 // Contexto para el tema
 type Theme = "light" | "dark";
@@ -63,9 +64,11 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <PortfolioProvider>
-      <ThemeProvider>
-        <Component {...pageProps} />
-      </ThemeProvider>
+      <AuthProvider>
+        <ThemeProvider>
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </AuthProvider>
     </PortfolioProvider>
   );
 }
