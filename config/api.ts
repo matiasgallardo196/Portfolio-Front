@@ -13,7 +13,7 @@ export const API_CONFIG = {
 
   // Endpoints
   ENDPOINTS: {
-    PORTFOLIO: "/portfolio/bbb735cf-ef78-47ac-a234-61f88e97925b",
+    PORTFOLIO: "/portfolio",
   },
 } as const;
 
