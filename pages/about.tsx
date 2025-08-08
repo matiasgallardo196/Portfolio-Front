@@ -4,19 +4,11 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import { ErrorMessage } from "../components/ErrorMessage";
-import { MockDataBanner } from "../components/MockDataBanner";
 import { usePortfolio } from "../context/PortfolioContext";
 
 export default function About() {
-  const {
-    portfolio,
-    loading,
-    error,
-    hasApiError,
-    isUsingMockData,
-    refreshPortfolio,
-  } = usePortfolio();
-  const { skills, achievements, about, languages } = portfolio;
+  const { portfolio, loading, error, hasApiError, refreshPortfolio } =
+    usePortfolio();
 
   // Mostrar loading mientras se cargan los datos
   if (loading) {
@@ -28,6 +20,18 @@ export default function About() {
     return <ErrorMessage message={error} onRetry={refreshPortfolio} />;
   }
 
+  // Mostrar error si no hay datos del portfolio
+  if (!portfolio) {
+    return (
+      <ErrorMessage
+        message="No se pudieron cargar los datos del portfolio"
+        onRetry={refreshPortfolio}
+      />
+    );
+  }
+
+  const { skills, achievements, about, languages } = portfolio;
+
   return (
     <>
       <Head>
@@ -38,12 +42,6 @@ export default function About() {
       <Navbar />
 
       <main className="min-h-screen relative">
-        {/* Banner de datos mock */}
-        {isUsingMockData && (
-          <div className="container-custom pt-4">
-            <MockDataBanner onRetry={refreshPortfolio} />
-          </div>
-        )}
         {/* Background decoration */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900"></div>
         <div className="absolute top-20 right-10 w-96 h-96 bg-primary-300/10 dark:bg-primary-600/10 rounded-full blur-3xl"></div>

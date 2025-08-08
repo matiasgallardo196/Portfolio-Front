@@ -6,16 +6,14 @@ import React, {
   useEffect,
 } from "react";
 import { PortfolioData } from "../data/types";
-import { portfolioData } from "../data";
 import { portfolioApi, ApiError } from "../services/api";
 
 // Context interface
 interface PortfolioContextType {
-  portfolio: PortfolioData;
+  portfolio: PortfolioData | null;
   loading: boolean;
   error: string | null;
   hasApiError: boolean;
-  isUsingMockData: boolean;
   refreshPortfolio: () => Promise<void>;
   updatePortfolio: (data: Partial<PortfolioData>) => Promise<void>;
 }
@@ -34,11 +32,10 @@ interface PortfolioProviderProps {
 export const PortfolioProvider: React.FC<PortfolioProviderProps> = ({
   children,
 }) => {
-  const [portfolio, setPortfolio] = useState<PortfolioData>(portfolioData);
+  const [portfolio, setPortfolio] = useState<PortfolioData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hasApiError, setHasApiError] = useState(false);
-  const [isUsingMockData, setIsUsingMockData] = useState(false);
 
   // Función para cargar datos desde la API
   const loadPortfolioFromApi = async () => {
@@ -46,7 +43,6 @@ export const PortfolioProvider: React.FC<PortfolioProviderProps> = ({
       setLoading(true);
       setError(null);
       setHasApiError(false);
-      setIsUsingMockData(false);
 
       const apiData = await portfolioApi.getPortfolio();
       setPortfolio(apiData);
@@ -61,9 +57,8 @@ export const PortfolioProvider: React.FC<PortfolioProviderProps> = ({
         setHasApiError(true);
       }
 
-      // Fallback a datos mock en caso de error
-      setPortfolio(portfolioData);
-      setIsUsingMockData(true);
+      // No usar datos mock - mantener portfolio como null
+      setPortfolio(null);
     } finally {
       setLoading(false);
     }
@@ -107,7 +102,6 @@ export const PortfolioProvider: React.FC<PortfolioProviderProps> = ({
     loading,
     error,
     hasApiError,
-    isUsingMockData,
     refreshPortfolio,
     updatePortfolio,
   };

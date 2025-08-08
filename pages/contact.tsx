@@ -3,19 +3,11 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import { ErrorMessage } from "../components/ErrorMessage";
-import { MockDataBanner } from "../components/MockDataBanner";
 import { usePortfolio } from "../context/PortfolioContext";
 
 export default function Contact() {
-  const {
-    portfolio,
-    loading,
-    error,
-    hasApiError,
-    isUsingMockData,
-    refreshPortfolio,
-  } = usePortfolio();
-  const { contact } = portfolio;
+  const { portfolio, loading, error, hasApiError, refreshPortfolio } =
+    usePortfolio();
 
   // Mostrar loading mientras se cargan los datos
   if (loading) {
@@ -26,6 +18,18 @@ export default function Contact() {
   if (hasApiError && error) {
     return <ErrorMessage message={error} onRetry={refreshPortfolio} />;
   }
+
+  // Mostrar error si no hay datos del portfolio
+  if (!portfolio) {
+    return (
+      <ErrorMessage
+        message="No se pudieron cargar los datos del portfolio"
+        onRetry={refreshPortfolio}
+      />
+    );
+  }
+
+  const { contact, about } = portfolio;
 
   const contactInfo = [
     {
@@ -73,19 +77,13 @@ export default function Contact() {
   return (
     <>
       <Head>
-        <title>{portfolio.about.fullName} Portfolio</title>
+        <title>{about.fullName} Portfolio</title>
         <meta name="description" content={contact.metaDescription} />
       </Head>
 
       <Navbar />
 
       <main className="min-h-screen relative">
-        {/* Banner de datos mock */}
-        {isUsingMockData && (
-          <div className="container-custom pt-4">
-            <MockDataBanner onRetry={refreshPortfolio} />
-          </div>
-        )}
         {/* Background decoration */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900"></div>
         <div className="absolute top-20 left-10 w-96 h-96 bg-primary-300/10 dark:bg-primary-600/10 rounded-full blur-3xl"></div>

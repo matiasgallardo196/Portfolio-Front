@@ -1,7 +1,7 @@
 // Configuración de la API
 export const API_CONFIG = {
   // URL base de la API - puede ser configurada por variables de entorno
-  BASE_URL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api",
+  BASE_URL: process.env.NEXT_PUBLIC_API_URL,
 
   // Timeout para las peticiones (en milisegundos)
   TIMEOUT: 10000,
@@ -13,7 +13,7 @@ export const API_CONFIG = {
 
   // Endpoints
   ENDPOINTS: {
-    PORTFOLIO: "/portfolio",
+    PORTFOLIO: "/portfolio/bbb735cf-ef78-47ac-a234-61f88e97925b",
   },
 } as const;
 

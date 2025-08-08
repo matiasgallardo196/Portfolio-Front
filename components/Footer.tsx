@@ -3,7 +3,13 @@ import { usePortfolio } from "../context/PortfolioContext";
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const { portfolio } = usePortfolio();
-  const { contact } = portfolio;
+
+  // Si no hay portfolio, no renderizar nada (la página mostrará error)
+  if (!portfolio) {
+    return null;
+  }
+
+  const { contact, about } = portfolio;
 
   const socialLinks = [
     {
@@ -57,7 +63,7 @@ const Footer = () => {
           {/* Left side - Copyright */}
           <div className="text-center lg:text-left">
             <p className="text-gray-400 dark:text-gray-500 text-lg">
-              © {currentYear} {portfolio.about.fullName}. All rights reserved.
+              © {currentYear} {about.fullName}. All rights reserved.
             </p>
           </div>
 

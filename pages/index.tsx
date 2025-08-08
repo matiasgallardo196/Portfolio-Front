@@ -5,19 +5,11 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import { ErrorMessage } from "../components/ErrorMessage";
-import { MockDataBanner } from "../components/MockDataBanner";
 import { usePortfolio } from "../context/PortfolioContext";
 
 export default function Home() {
-  const {
-    portfolio,
-    loading,
-    error,
-    hasApiError,
-    isUsingMockData,
-    refreshPortfolio,
-  } = usePortfolio();
-  const { about, projects, languages } = portfolio;
+  const { portfolio, loading, error, hasApiError, refreshPortfolio } =
+    usePortfolio();
 
   // Mostrar loading mientras se cargan los datos
   if (loading) {
@@ -29,22 +21,57 @@ export default function Home() {
     return <ErrorMessage message={error} onRetry={refreshPortfolio} />;
   }
 
+  // Mostrar error si no hay datos del portfolio
+  if (!portfolio) {
+    return (
+      <ErrorMessage
+        message="No se pudieron cargar los datos del portfolio"
+        onRetry={refreshPortfolio}
+      />
+    );
+  }
+
+  const { about, projects, languages, skills } = portfolio;
+
+  // Validaciones de seguridad para propiedades que pueden ser undefined
+  const safeAbout = about || {
+    fullName: "Portfolio",
+    metaDescription: "Portfolio personal",
+    heroTitle: "Desarrollador Full Stack",
+    heroSubtitle: "Apasionado por crear experiencias digitales únicas",
+    ctaButtons: {
+      projects: "Ver Proyectos",
+      contact: "Contactar",
+    },
+    stats: {
+      projects: { title: "Proyectos", subtitle: "Completados" },
+      technologies: { title: "Tecnologías", subtitle: "Dominadas" },
+      languages: { title: "Idiomas", subtitle: "Fluidez" },
+    },
+  };
+
+  const safeProjects = projects || [];
+  const safeLanguages = languages || [];
+  const safeSkills = skills || {
+    languages: [],
+    frontend: [],
+    backend: [],
+    databases: [],
+    devops: [],
+    integrations: [],
+    practices: [],
+  };
+
   return (
     <>
       <Head>
-        <title>{about.fullName} Portfolio</title>
-        <meta name="description" content={about.metaDescription} />
+        <title>{safeAbout.fullName} Portfolio</title>
+        <meta name="description" content={safeAbout.metaDescription} />
       </Head>
 
       <Navbar />
 
       <main>
-        {/* Banner de datos mock */}
-        {isUsingMockData && (
-          <div className="container-custom pt-4">
-            <MockDataBanner onRetry={refreshPortfolio} />
-          </div>
-        )}
         {/* Hero Section */}
         <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
           {/* Background Elements */}
@@ -64,12 +91,12 @@ export default function Home() {
               {/* Name and Title */}
               <div className="animate-slide-up">
                 <h1 className="text-6xl md:text-7xl font-bold mb-6 gradient-text">
-                  {about.fullName}
+                  {safeAbout.fullName}
                 </h1>
                 <h2 className="text-2xl md:text-3xl text-gray-700 dark:text-gray-300 font-semibold mb-8">
-                  {about.heroTitle}
+                  {safeAbout.heroTitle}
                   <span className="block text-lg text-primary-600 dark:text-primary-400 font-medium mt-2">
-                    {about.heroSubtitle}
+                    {safeAbout.heroSubtitle}
                   </span>
                 </h2>
               </div>
@@ -84,7 +111,7 @@ export default function Home() {
                   className="btn-primary text-lg px-10 py-4 group"
                 >
                   <span className="flex items-center gap-2">
-                    {about.ctaButtons.projects}
+                    {safeAbout.ctaButtons.projects}
                     <svg
                       className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
                       fill="none"
@@ -105,7 +132,7 @@ export default function Home() {
                   className="btn-secondary text-lg px-10 py-4 group"
                 >
                   <span className="flex items-center gap-2">
-                    {about.ctaButtons.contact}
+                    {safeAbout.ctaButtons.contact}
                     <svg
                       className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
                       fill="none"
@@ -131,36 +158,36 @@ export default function Home() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   <div className="card hover-lift text-center group">
                     <div className="text-5xl font-bold gradient-text mb-4 group-hover:scale-110 transition-transform duration-300">
-                      {projects.length}+
+                      {safeProjects.length}+
                     </div>
                     <div className="text-gray-600 dark:text-gray-400 text-lg font-medium">
-                      {about.stats.projects.title}
+                      {safeAbout.stats.projects.title}
                     </div>
                     <div className="mt-4 text-sm text-gray-500 dark:text-gray-500">
-                      {about.stats.projects.subtitle}
+                      {safeAbout.stats.projects.subtitle}
                     </div>
                   </div>
                   <div className="card hover-lift text-center group">
                     <div className="text-5xl font-bold gradient-text mb-4 group-hover:scale-110 transition-transform duration-300">
-                      {Object.values(portfolio.skills).flat().length}+
+                      {Object.values(safeSkills).flat().length}+
                     </div>
                     <div className="text-gray-600 dark:text-gray-400 text-lg font-medium">
-                      {about.stats.technologies.title}
+                      {safeAbout.stats.technologies.title}
                     </div>
                     <div className="mt-4 text-sm text-gray-500 dark:text-gray-500">
-                      {about.stats.technologies.subtitle}
+                      {safeAbout.stats.technologies.subtitle}
                     </div>
                   </div>
                   <div className="card hover-lift text-center group">
                     <div className="text-5xl font-bold gradient-text mb-4 group-hover:scale-110 transition-transform duration-300">
-                      {languages.length}
+                      {safeLanguages.length}
                     </div>
                     <div className="text-gray-600 dark:text-gray-400 text-lg font-medium">
-                      {about.stats.languages.title} (
-                      {languages.map((l) => l.name).join(" & ")})
+                      {safeAbout.stats.languages.title} (
+                      {safeLanguages.map((l) => l.name).join(" & ")})
                     </div>
                     <div className="mt-4 text-sm text-gray-500 dark:text-gray-500">
-                      {about.stats.languages.subtitle}
+                      {safeAbout.stats.languages.subtitle}
                     </div>
                   </div>
                 </div>

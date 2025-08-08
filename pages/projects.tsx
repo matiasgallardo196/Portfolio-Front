@@ -5,7 +5,6 @@ import Footer from "../components/Footer";
 import ProjectCard from "../components/ProjectCard";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import { ErrorMessage } from "../components/ErrorMessage";
-import { MockDataBanner } from "../components/MockDataBanner";
 import { usePortfolio } from "../context/PortfolioContext";
 import {
   projectsPageDescription,
@@ -13,15 +12,8 @@ import {
 } from "../data/projects";
 
 export default function Projects() {
-  const {
-    portfolio,
-    loading,
-    error,
-    hasApiError,
-    isUsingMockData,
-    refreshPortfolio,
-  } = usePortfolio();
-  const { projects } = portfolio;
+  const { portfolio, loading, error, hasApiError, refreshPortfolio } =
+    usePortfolio();
 
   // Mostrar loading mientras se cargan los datos
   if (loading) {
@@ -33,10 +25,22 @@ export default function Projects() {
     return <ErrorMessage message={error} onRetry={refreshPortfolio} />;
   }
 
+  // Mostrar error si no hay datos del portfolio
+  if (!portfolio) {
+    return (
+      <ErrorMessage
+        message="No se pudieron cargar los datos del portfolio"
+        onRetry={refreshPortfolio}
+      />
+    );
+  }
+
+  const { projects, about } = portfolio;
+
   return (
     <>
       <Head>
-        <title>{portfolio.about.fullName} Portfolio</title>
+        <title>{about.fullName} Portfolio</title>
         <meta
           name="description"
           content="Portfolio of full stack development projects by Matias Gallardo"
@@ -46,12 +50,6 @@ export default function Projects() {
       <Navbar />
 
       <main className="min-h-screen relative">
-        {/* Banner de datos mock */}
-        {isUsingMockData && (
-          <div className="container-custom pt-4">
-            <MockDataBanner onRetry={refreshPortfolio} />
-          </div>
-        )}
         {/* Background decoration */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900"></div>
         <div className="absolute top-20 right-10 w-96 h-96 bg-primary-300/10 dark:bg-primary-600/10 rounded-full blur-3xl"></div>

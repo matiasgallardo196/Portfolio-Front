@@ -3,12 +3,29 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import ThemeToggle from "./ThemeToggle";
 import { usePortfolio } from "../context/PortfolioContext";
+import { themeData } from "../data/theme";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const { portfolio } = usePortfolio();
-  const { theme: themeConfig } = portfolio;
+
+  // Si no hay portfolio, no renderizar nada (la página mostrará error)
+  if (!portfolio) {
+    return null;
+  }
+
+  const { theme: themeConfig, about } = portfolio;
+
+  // Usar themeData como fallback si themeConfig es undefined o no tiene las propiedades necesarias
+  const safeThemeConfig = themeConfig || themeData;
+
+  // Validaciones adicionales para propiedades específicas
+  const zIndex = safeThemeConfig?.zIndex?.navbar ?? 50;
+  const navbarHeight = safeThemeConfig?.spacing?.navbar?.height ?? "5rem";
+  const backdropBlur = safeThemeConfig?.backdropBlur?.md ?? "12px";
+  const transition =
+    safeThemeConfig?.transitions?.normal ?? "300ms ease-in-out";
 
   const navItems = [
     { href: "/", label: "Home" },
@@ -23,9 +40,9 @@ const Navbar = () => {
     <nav
       className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg sticky top-0 z-50 border-b border-white/20 dark:border-gray-700/20"
       style={{
-        zIndex: themeConfig.zIndex.navbar,
-        height: themeConfig.spacing.navbar.height,
-        backdropFilter: `blur(${themeConfig.backdropBlur.md})`,
+        zIndex: zIndex,
+        height: navbarHeight,
+        backdropFilter: `blur(${backdropBlur})`,
       }}
     >
       <div className="container-custom">
@@ -35,10 +52,10 @@ const Navbar = () => {
             href="/"
             className="text-2xl font-bold gradient-text hover:scale-105 transition-transform duration-300"
             style={{
-              transition: themeConfig.transitions.normal,
+              transition: transition,
             }}
           >
-            {portfolio.about.fullName}
+            {about?.fullName || "Portfolio"}
           </Link>
 
           {/* Desktop Navigation */}
