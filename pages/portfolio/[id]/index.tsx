@@ -71,21 +71,59 @@ export default function UserHome() {
     }
   };
 
+  // Función para limpiar los datos del about, removiendo campos gestionados por la BD
+  const cleanAboutData = (aboutData: any) => {
+    const { id, createdAt, updatedAt, userId, ...cleanData } = aboutData;
+
+    return cleanData;
+  };
+
+  const updateAbout = async (aboutData: Partial<PortfolioData["about"]>) => {
+    if (!id || typeof id !== "string") return;
+
+    try {
+      setSaving(true);
+
+      // Limpiar los datos antes de enviar
+      const cleanData = cleanAboutData(aboutData);
+
+      // Debug: Log de los datos que se están enviando
+      console.log("Enviando datos al backend:", {
+        userId: id,
+        aboutData: cleanData,
+        endpoint: `/portfolio/${id}/about`,
+      });
+
+      // Usar el nuevo endpoint específico para about
+      await portfolioApi.updatePortfolioAbout(
+        id,
+        cleanData,
+        token || undefined
+      );
+
+      // Recargar el portfolio completo para asegurar consistencia
+      await loadPortfolio();
+    } catch (err) {
+      console.error("Error updating about:", err);
+      // Aquí podrías mostrar un toast de error
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const handleUpdateAbout = (
     field: keyof PortfolioData["about"],
     value: string
   ) => {
     if (!portfolio) return;
 
+    // Enviar el objeto about completo con el campo actualizado
     const updatedAbout = {
       ...portfolio.about,
       [field]: value,
     };
 
-    updatePortfolio({
-      ...portfolio,
-      about: updatedAbout,
-    });
+    updateAbout(updatedAbout);
   };
 
   const handleUpdateCtaButton = (
@@ -94,20 +132,16 @@ export default function UserHome() {
   ) => {
     if (!portfolio) return;
 
-    const updatedCtaButtons = {
-      ...portfolio.about.ctaButtons,
-      [buttonType]: value,
-    };
-
+    // Enviar el objeto about completo con ctaButtons actualizado
     const updatedAbout = {
       ...portfolio.about,
-      ctaButtons: updatedCtaButtons,
+      ctaButtons: {
+        ...portfolio.about.ctaButtons,
+        [buttonType]: value,
+      },
     };
 
-    updatePortfolio({
-      ...portfolio,
-      about: updatedAbout,
-    });
+    updateAbout(updatedAbout);
   };
 
   const handleUpdateStats = (
@@ -117,23 +151,19 @@ export default function UserHome() {
   ) => {
     if (!portfolio) return;
 
-    const updatedStats = {
-      ...portfolio.about.stats,
-      [statType]: {
-        ...portfolio.about.stats[statType],
-        [field]: value,
+    // Enviar el objeto about completo con stats actualizado
+    const updatedAbout = {
+      ...portfolio.about,
+      stats: {
+        ...portfolio.about.stats,
+        [statType]: {
+          ...portfolio.about.stats[statType],
+          [field]: value,
+        },
       },
     };
 
-    const updatedAbout = {
-      ...portfolio.about,
-      stats: updatedStats,
-    };
-
-    updatePortfolio({
-      ...portfolio,
-      about: updatedAbout,
-    });
+    updateAbout(updatedAbout);
   };
 
   if (loading) {
