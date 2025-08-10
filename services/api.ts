@@ -43,6 +43,38 @@ export const portfolioApi = {
     }
   },
 
+  async getPortfolioById(id: string, token?: string): Promise<PortfolioData> {
+    try {
+      const response = await fetch(
+        buildApiUrl(`${API_CONFIG.ENDPOINTS.PORTFOLIO}/${id}`),
+        {
+          method: "GET",
+          headers: {
+            ...API_CONFIG.DEFAULT_HEADERS,
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new ApiError(
+          `Error al obtener el portfolio por id: ${response.statusText}`,
+          response.status,
+          response.statusText
+        );
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        throw error;
+      }
+
+      throw new ApiError("Error de conexión al servidor", 0, "NETWORK_ERROR");
+    }
+  },
+
   // Métodos adicionales para futuras funcionalidades
   async updatePortfolio(
     portfolioData: Partial<PortfolioData>

@@ -81,8 +81,13 @@ const Dashboard = () => {
                     Sign Out
                   </button>
 
-                  <Link href="/" className="btn-primary">
-                    Back to Portfolio
+                  <Link
+                    href={`/portfolio/${user?.id ?? ""}`}
+                    className="btn-primary"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Ver mi Portfolio
                   </Link>
                 </div>
 
