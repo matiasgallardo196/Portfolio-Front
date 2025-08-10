@@ -1,6 +1,8 @@
 import Head from "next/head";
 import Navbar from "../../../components/Navbar";
 import Footer from "../../../components/Footer";
+import UserPortfolioNavbar from "../../../components/UserPortfolioNavbar";
+import UserPortfolioFooter from "../../../components/UserPortfolioFooter";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import ErrorMessage from "../../../components/ErrorMessage";
 import ProtectedRoute from "../../../components/ProtectedRoute";
@@ -128,112 +130,117 @@ export default function UserContact() {
 
         <Navbar />
 
-        <main className="min-h-screen relative">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900"></div>
-          <div className="absolute top-20 left-10 w-96 h-96 bg-primary-300/10 dark:bg-primary-600/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent-300/10 dark:bg-accent-600/10 rounded-full blur-3xl"></div>
+        {/* Contenedor rojo para TODO el contenido del usuario */}
+        <div className="border-4 border-red-500 rounded-lg m-4 p-4 bg-red-50 dark:bg-red-900/20">
+          <UserPortfolioNavbar />
 
-          <section className="py-20 relative z-10">
-            <div className="container-custom">
-              <div className="text-center mb-16 animate-fade-in">
-                <h1 className="section-title mb-6">{contact.heroTitle}</h1>
-              </div>
+          <main className="min-h-screen relative pt-4">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900"></div>
+            <div className="absolute top-20 left-10 w-96 h-96 bg-primary-300/10 dark:bg-primary-600/10 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent-300/10 dark:bg-accent-600/10 rounded-full blur-3xl"></div>
 
-              <div className="max-w-6xl mx-auto">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-                  {contactInfo.map((contact, index) => (
-                    <div
-                      key={index}
-                      className="animate-slide-up"
-                      style={{ animationDelay: `${index * 0.1}s` }}
-                    >
-                      <a
-                        href={contact.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="card hover-lift group h-full flex flex-col items-center text-center p-8"
+            <section className="py-20 relative z-10">
+              <div className="container-custom">
+                <div className="text-center mb-16 animate-fade-in">
+                  <h1 className="section-title mb-6">{contact.heroTitle}</h1>
+                </div>
+
+                <div className="max-w-6xl mx-auto">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                    {contactInfo.map((contact, index) => (
+                      <div
+                        key={index}
+                        className="animate-slide-up"
+                        style={{ animationDelay: `${index * 0.1}s` }}
                       >
-                        <div className="bg-gradient-to-r from-primary-500 to-accent-500 dark:from-primary-400 dark:to-accent-400 p-4 rounded-2xl mb-6 group-hover:scale-110 transition-transform duration-300">
-                          <div className="text-white">{contact.icon}</div>
-                        </div>
-                        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 group-hover:gradient-text transition-all duration-300">
-                          {contact.name}
-                        </h3>
-                        <p className="text-gray-600 dark:text-gray-400 text-lg">
-                          {contact.value}
-                        </p>
-                      </a>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                  <div
-                    className="animate-slide-up"
-                    style={{ animationDelay: "0.3s" }}
-                  >
-                    <div className="glass-card p-8 h-full">
-                      <h2 className="text-3xl font-bold gradient-text mb-6">
-                        {contact.letsTalkTitle}
-                      </h2>
-                      <p className="text-xl text-gray-700 dark:text-gray-300 leading-relaxed mb-8">
-                        {contact.letsTalkDescription}
-                      </p>
-
-                      <div className="flex items-center gap-4">
-                        <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                        <span className="text-lg text-gray-700 dark:text-gray-300 font-semibold">
-                          Available for new opportunities
-                        </span>
+                        <a
+                          href={contact.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="card hover-lift group h-full flex flex-col items-center text-center p-8"
+                        >
+                          <div className="bg-gradient-to-r from-primary-500 to-accent-500 dark:from-primary-400 dark:to-accent-400 p-4 rounded-2xl mb-6 group-hover:scale-110 transition-transform duration-300">
+                            <div className="text-white">{contact.icon}</div>
+                          </div>
+                          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 group-hover:gradient-text transition-all duration-300">
+                            {contact.name}
+                          </h3>
+                          <p className="text-gray-600 dark:text-gray-400 text-lg">
+                            {contact.value}
+                          </p>
+                        </a>
                       </div>
-                    </div>
+                    ))}
                   </div>
 
-                  <div
-                    className="animate-slide-up"
-                    style={{ animationDelay: "0.4s" }}
-                  >
-                    <div className="glass-card p-8 h-full">
-                      <h2 className="text-3xl font-bold gradient-text mb-8">
-                        {contact.availabilityTitle}
-                      </h2>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <div
+                      className="animate-slide-up"
+                      style={{ animationDelay: "0.3s" }}
+                    >
+                      <div className="glass-card p-8 h-full">
+                        <h2 className="text-3xl font-bold gradient-text mb-6">
+                          {contact.letsTalkTitle}
+                        </h2>
+                        <p className="text-xl text-gray-700 dark:text-gray-300 leading-relaxed mb-8">
+                          {contact.letsTalkDescription}
+                        </p>
 
-                      <div className="space-y-8">
-                        <div>
-                          <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                            {contact.currentStatusTitle}
-                          </h3>
-                          <div className="space-y-3">
-                            {contact.opportunities.map((item) => (
-                              <div
-                                key={item.id}
-                                className="flex items-center gap-3"
-                              >
-                                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                <span className="text-gray-700 dark:text-gray-300">
-                                  {item.name}
-                                </span>
-                              </div>
-                            ))}
-                          </div>
+                        <div className="flex items-center gap-4">
+                          <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                          <span className="text-lg text-gray-700 dark:text-gray-300 font-semibold">
+                            Available for new opportunities
+                          </span>
                         </div>
+                      </div>
+                    </div>
 
-                        <div>
-                          <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                            {contact.locationTitle}
-                          </h3>
-                          <div className="space-y-3">
-                            {contact.locationInfo.map((item) => (
-                              <div
-                                key={item.id}
-                                className="flex items-center gap-3"
-                              >
-                                <div className="w-2 h-2 bg-primary-500 dark:bg-primary-400 rounded-full"></div>
-                                <span className="text-gray-700 dark:text-gray-300">
-                                  {item.name}
-                                </span>
-                              </div>
-                            ))}
+                    <div
+                      className="animate-slide-up"
+                      style={{ animationDelay: "0.4s" }}
+                    >
+                      <div className="glass-card p-8 h-full">
+                        <h2 className="text-3xl font-bold gradient-text mb-8">
+                          {contact.availabilityTitle}
+                        </h2>
+
+                        <div className="space-y-8">
+                          <div>
+                            <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                              {contact.currentStatusTitle}
+                            </h3>
+                            <div className="space-y-3">
+                              {contact.opportunities.map((item) => (
+                                <div
+                                  key={item.id}
+                                  className="flex items-center gap-3"
+                                >
+                                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                                  <span className="text-gray-700 dark:text-gray-300">
+                                    {item.name}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div>
+                            <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                              {contact.locationTitle}
+                            </h3>
+                            <div className="space-y-3">
+                              {contact.locationInfo.map((item) => (
+                                <div
+                                  key={item.id}
+                                  className="flex items-center gap-3"
+                                >
+                                  <div className="w-2 h-2 bg-primary-500 dark:bg-primary-400 rounded-full"></div>
+                                  <span className="text-gray-700 dark:text-gray-300">
+                                    {item.name}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -241,9 +248,11 @@ export default function UserContact() {
                   </div>
                 </div>
               </div>
-            </div>
-          </section>
-        </main>
+            </section>
+          </main>
+
+          <UserPortfolioFooter />
+        </div>
 
         <Footer />
       </>
