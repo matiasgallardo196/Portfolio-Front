@@ -107,4 +107,41 @@ export const portfolioApi = {
       throw new ApiError("Error de conexión al servidor", 0, "NETWORK_ERROR");
     }
   },
+
+  async updatePortfolioById(
+    id: string,
+    portfolioData: Partial<PortfolioData>,
+    token?: string
+  ): Promise<PortfolioData> {
+    try {
+      const response = await fetch(
+        buildApiUrl(`${API_CONFIG.ENDPOINTS.PORTFOLIO}/${id}`),
+        {
+          method: "PUT",
+          headers: {
+            ...API_CONFIG.DEFAULT_HEADERS,
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          body: JSON.stringify(portfolioData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new ApiError(
+          `Error al actualizar el portfolio del usuario ${id}: ${response.statusText}`,
+          response.status,
+          response.statusText
+        );
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        throw error;
+      }
+
+      throw new ApiError("Error de conexión al servidor", 0, "NETWORK_ERROR");
+    }
+  },
 };

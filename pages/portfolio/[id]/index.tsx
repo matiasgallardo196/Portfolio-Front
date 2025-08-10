@@ -8,6 +8,7 @@ import UserPortfolioFooter from "../../../components/UserPortfolioFooter";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import ErrorMessage from "../../../components/ErrorMessage";
 import ProtectedRoute from "../../../components/ProtectedRoute";
+import EditableText from "../../../components/EditableText";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { portfolioApi, ApiError } from "../../../services/api";
@@ -23,6 +24,7 @@ export default function UserHome() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hasApiError, setHasApiError] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const loadPortfolio = async () => {
     if (!router.isReady || typeof id !== "string") return;
@@ -49,6 +51,90 @@ export default function UserHome() {
     void loadPortfolio();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.isReady, id, token]);
+
+  const updatePortfolio = async (updates: Partial<PortfolioData>) => {
+    if (!portfolio || !id || typeof id !== "string") return;
+
+    try {
+      setSaving(true);
+      const updatedPortfolio = await portfolioApi.updatePortfolioById(
+        id,
+        updates,
+        token || undefined
+      );
+      setPortfolio(updatedPortfolio);
+    } catch (err) {
+      console.error("Error updating portfolio:", err);
+      // Aquí podrías mostrar un toast de error
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleUpdateAbout = (
+    field: keyof PortfolioData["about"],
+    value: string
+  ) => {
+    if (!portfolio) return;
+
+    const updatedAbout = {
+      ...portfolio.about,
+      [field]: value,
+    };
+
+    updatePortfolio({
+      ...portfolio,
+      about: updatedAbout,
+    });
+  };
+
+  const handleUpdateCtaButton = (
+    buttonType: "projects" | "contact",
+    value: string
+  ) => {
+    if (!portfolio) return;
+
+    const updatedCtaButtons = {
+      ...portfolio.about.ctaButtons,
+      [buttonType]: value,
+    };
+
+    const updatedAbout = {
+      ...portfolio.about,
+      ctaButtons: updatedCtaButtons,
+    };
+
+    updatePortfolio({
+      ...portfolio,
+      about: updatedAbout,
+    });
+  };
+
+  const handleUpdateStats = (
+    statType: "projects" | "technologies" | "languages",
+    field: "title" | "subtitle",
+    value: string
+  ) => {
+    if (!portfolio) return;
+
+    const updatedStats = {
+      ...portfolio.about.stats,
+      [statType]: {
+        ...portfolio.about.stats[statType],
+        [field]: value,
+      },
+    };
+
+    const updatedAbout = {
+      ...portfolio.about,
+      stats: updatedStats,
+    };
+
+    updatePortfolio({
+      ...portfolio,
+      about: updatedAbout,
+    });
+  };
 
   if (loading) {
     return (
@@ -144,15 +230,33 @@ export default function UserHome() {
                 <div className="max-w-5xl mx-auto">
                   {/* Name and Title */}
                   <div className="animate-slide-up">
-                    <h1 className="text-6xl md:text-7xl font-bold mb-6 gradient-text">
-                      {safeAbout.fullName}
-                    </h1>
-                    <h2 className="text-2xl md:text-3xl text-gray-700 dark:text-gray-300 font-semibold mb-8">
-                      {safeAbout.heroTitle}
-                      <span className="block text-lg text-primary-600 dark:text-primary-400 font-medium mt-2">
-                        {safeAbout.heroSubtitle}
-                      </span>
-                    </h2>
+                    <EditableText
+                      value={safeAbout.fullName}
+                      onSave={(value) => handleUpdateAbout("fullName", value)}
+                      className="text-6xl md:text-7xl font-bold mb-6 gradient-text"
+                      tag="h1"
+                      placeholder="Tu nombre completo"
+                    />
+                    <div className="text-2xl md:text-3xl text-gray-700 dark:text-gray-300 font-semibold mb-8">
+                      <EditableText
+                        value={safeAbout.heroTitle}
+                        onSave={(value) =>
+                          handleUpdateAbout("heroTitle", value)
+                        }
+                        className="block"
+                        tag="div"
+                        placeholder="Tu título profesional"
+                      />
+                      <EditableText
+                        value={safeAbout.heroSubtitle}
+                        onSave={(value) =>
+                          handleUpdateAbout("heroSubtitle", value)
+                        }
+                        className="block text-lg text-primary-600 dark:text-primary-400 font-medium mt-2"
+                        tag="div"
+                        placeholder="Tu subtítulo o descripción"
+                      />
+                    </div>
                   </div>
 
                   {/* CTA Buttons */}
@@ -165,7 +269,14 @@ export default function UserHome() {
                       className="btn-primary text-lg px-10 py-4 group"
                     >
                       <span className="flex items-center gap-2">
-                        {safeAbout.ctaButtons.projects}
+                        <EditableText
+                          value={safeAbout.ctaButtons.projects}
+                          onSave={(value) =>
+                            handleUpdateCtaButton("projects", value)
+                          }
+                          className="inline"
+                          placeholder="Ver Proyectos"
+                        />
                         <svg
                           className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
                           fill="none"
@@ -186,7 +297,14 @@ export default function UserHome() {
                       className="btn-secondary text-lg px-10 py-4 group"
                     >
                       <span className="flex items-center gap-2">
-                        {safeAbout.ctaButtons.contact}
+                        <EditableText
+                          value={safeAbout.ctaButtons.contact}
+                          onSave={(value) =>
+                            handleUpdateCtaButton("contact", value)
+                          }
+                          className="inline"
+                          placeholder="Contactar"
+                        />
                         <svg
                           className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
                           fill="none"
@@ -215,10 +333,22 @@ export default function UserHome() {
                           {safeProjects.length}+
                         </div>
                         <div className="text-gray-600 dark:text-gray-400 text-lg font-medium">
-                          {safeAbout.stats.projects.title}
+                          <EditableText
+                            value={safeAbout.stats.projects.title}
+                            onSave={(value) =>
+                              handleUpdateStats("projects", "title", value)
+                            }
+                            placeholder="Proyectos"
+                          />
                         </div>
                         <div className="mt-4 text-sm text-gray-500 dark:text-gray-500">
-                          {safeAbout.stats.projects.subtitle}
+                          <EditableText
+                            value={safeAbout.stats.projects.subtitle}
+                            onSave={(value) =>
+                              handleUpdateStats("projects", "subtitle", value)
+                            }
+                            placeholder="Completados"
+                          />
                         </div>
                       </div>
                       <div className="card hover-lift text-center group">
@@ -226,10 +356,26 @@ export default function UserHome() {
                           {Object.values(safeSkills).flat().length}+
                         </div>
                         <div className="text-gray-600 dark:text-gray-400 text-lg font-medium">
-                          {safeAbout.stats.technologies.title}
+                          <EditableText
+                            value={safeAbout.stats.technologies.title}
+                            onSave={(value) =>
+                              handleUpdateStats("technologies", "title", value)
+                            }
+                            placeholder="Tecnologías"
+                          />
                         </div>
                         <div className="mt-4 text-sm text-gray-500 dark:text-gray-500">
-                          {safeAbout.stats.technologies.subtitle}
+                          <EditableText
+                            value={safeAbout.stats.technologies.subtitle}
+                            onSave={(value) =>
+                              handleUpdateStats(
+                                "technologies",
+                                "subtitle",
+                                value
+                              )
+                            }
+                            placeholder="Dominadas"
+                          />
                         </div>
                       </div>
                       <div className="card hover-lift text-center group">
@@ -237,11 +383,26 @@ export default function UserHome() {
                           {safeLanguages.length}
                         </div>
                         <div className="text-gray-600 dark:text-gray-400 text-lg font-medium">
-                          {safeAbout.stats.languages.title} (
-                          {safeLanguages.map((l) => l.name).join(" & ")})
+                          <EditableText
+                            value={`${
+                              safeAbout.stats.languages.title
+                            } (${safeLanguages
+                              .map((l) => l.name)
+                              .join(" & ")})`}
+                            onSave={(value) =>
+                              handleUpdateStats("languages", "title", value)
+                            }
+                            placeholder="Idiomas (Spanish & English)"
+                          />
                         </div>
                         <div className="mt-4 text-sm text-gray-500 dark:text-gray-500">
-                          {safeAbout.stats.languages.subtitle}
+                          <EditableText
+                            value={safeAbout.stats.languages.subtitle}
+                            onSave={(value) =>
+                              handleUpdateStats("languages", "subtitle", value)
+                            }
+                            placeholder="Fluidez"
+                          />
                         </div>
                       </div>
                     </div>
