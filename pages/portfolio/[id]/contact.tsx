@@ -131,10 +131,10 @@ export default function UserContact() {
         <Navbar />
 
         {/* Contenedor rojo para TODO el contenido del usuario */}
-        <div className="border-4 border-red-500 rounded-lg m-4 p-4 bg-red-50 dark:bg-red-900/20">
+        <div className="border-4 border-red-500 rounded-lg m-4 bg-red-50 dark:bg-red-900/20">
           <UserPortfolioNavbar />
 
-          <main className="min-h-screen relative pt-4">
+          <main className="min-h-screen relative">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900"></div>
             <div className="absolute top-20 left-10 w-96 h-96 bg-primary-300/10 dark:bg-primary-600/10 rounded-full blur-3xl"></div>
             <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent-300/10 dark:bg-accent-600/10 rounded-full blur-3xl"></div>

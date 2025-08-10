@@ -122,10 +122,10 @@ export default function UserHome() {
         <Navbar />
 
         {/* Contenedor rojo para TODO el contenido del usuario */}
-        <div className="border-4 border-red-500 rounded-lg m-4 p-4 bg-red-50 dark:bg-red-900/20">
+        <div className="border-4 border-red-500 rounded-lg m-4 bg-red-50 dark:bg-red-900/20">
           <UserPortfolioNavbar />
 
-          <main className="pt-4">
+          <main>
             {/* Hero Section */}
             <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
               {/* Background Elements */}
