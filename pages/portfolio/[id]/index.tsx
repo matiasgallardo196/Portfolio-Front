@@ -295,7 +295,7 @@ export default function UserHome() {
                     style={{ animationDelay: "0.2s" }}
                   >
                     <Link
-                      href="/projects"
+                      href={`/portfolio/${id}/projects`}
                       className="btn-primary text-lg px-10 py-4 group"
                     >
                       <span className="flex items-center gap-2">
@@ -323,7 +323,7 @@ export default function UserHome() {
                       </span>
                     </Link>
                     <Link
-                      href="/contact"
+                      href={`/portfolio/${id}/contact`}
                       className="btn-secondary text-lg px-10 py-4 group"
                     >
                       <span className="flex items-center gap-2">

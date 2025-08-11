@@ -148,7 +148,7 @@ export default function UserProjects() {
                       {projectsCallToAction.description}
                     </p>
                     <Link
-                      href="/contact"
+                      href={`/portfolio/${id}/contact`}
                       className="btn-primary text-lg px-10 py-4 group inline-flex items-center"
                     >
                       <span className="flex items-center gap-2">
