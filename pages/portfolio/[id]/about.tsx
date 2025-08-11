@@ -7,6 +7,7 @@ import UserPortfolioFooter from "../../../components/UserPortfolioFooter";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import ErrorMessage from "../../../components/ErrorMessage";
 import ProtectedRoute from "../../../components/ProtectedRoute";
+import EditableText from "../../../components/EditableText";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { portfolioApi, ApiError } from "../../../services/api";
@@ -22,6 +23,7 @@ export default function UserAbout() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hasApiError, setHasApiError] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const loadPortfolio = async () => {
     if (!router.isReady || typeof id !== "string") return;
@@ -48,6 +50,61 @@ export default function UserAbout() {
     void loadPortfolio();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.isReady, id, token]);
+
+  // Función para limpiar los datos del about, removiendo campos gestionados por la BD
+  const cleanAboutData = (aboutData: any) => {
+    const { id, createdAt, updatedAt, userId, ...cleanData } = aboutData;
+
+    return cleanData;
+  };
+
+  const updateAbout = async (aboutData: Partial<PortfolioData["about"]>) => {
+    if (!id || typeof id !== "string") return;
+
+    try {
+      setSaving(true);
+
+      // Limpiar los datos antes de enviar
+      const cleanData = cleanAboutData(aboutData);
+
+      // Debug: Log de los datos que se están enviando
+      console.log("Enviando datos al backend:", {
+        userId: id,
+        aboutData: cleanData,
+        endpoint: `/portfolio/${id}/about`,
+      });
+
+      // Usar el nuevo endpoint específico para about
+      await portfolioApi.updatePortfolioAbout(
+        id,
+        cleanData,
+        token || undefined
+      );
+
+      // Recargar el portfolio completo para asegurar consistencia
+      await loadPortfolio();
+    } catch (err) {
+      console.error("Error updating about:", err);
+      // Aquí podrías mostrar un toast de error
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleUpdateAbout = (
+    field: keyof PortfolioData["about"],
+    value: string
+  ) => {
+    if (!portfolio) return;
+
+    // Enviar el objeto about completo con el campo actualizado
+    const updatedAbout = {
+      ...portfolio.about,
+      [field]: value,
+    };
+
+    updateAbout(updatedAbout);
+  };
 
   if (loading) {
     return (
@@ -100,7 +157,15 @@ export default function UserAbout() {
             <section className="py-20 relative z-10">
               <div className="container-custom">
                 <div className="text-center mb-16 animate-fade-in">
-                  <h1 className="section-title mb-6">About Me</h1>
+                  <EditableText
+                    value="About Me"
+                    onSave={(value) =>
+                      handleUpdateAbout("pageDescription", value)
+                    }
+                    className="section-title mb-6"
+                    tag="h1"
+                    placeholder="Sobre mí"
+                  />
                 </div>
 
                 <div className="max-w-6xl mx-auto space-y-12">
@@ -128,12 +193,24 @@ export default function UserAbout() {
                           <div className="inline-flex items-center gap-2 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm px-6 py-3 rounded-full border border-white/20 dark:border-gray-700/20 shadow-lg">
                             <span className="text-2xl">📍</span>
                             <div className="flex flex-col">
-                              <p className="text-lg text-gray-700 dark:text-gray-300 font-medium">
-                                {about.location}
-                              </p>
-                              <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
-                                {about.relocationStatus}
-                              </p>
+                              <EditableText
+                                value={about.location}
+                                onSave={(value) =>
+                                  handleUpdateAbout("location", value)
+                                }
+                                className="text-lg text-gray-700 dark:text-gray-300 font-medium"
+                                tag="p"
+                                placeholder="Tu ubicación"
+                              />
+                              <EditableText
+                                value={about.relocationStatus}
+                                onSave={(value) =>
+                                  handleUpdateAbout("relocationStatus", value)
+                                }
+                                className="text-sm text-gray-500 dark:text-gray-400 font-medium"
+                                tag="p"
+                                placeholder="Estado de reubicación"
+                              />
                             </div>
                           </div>
                         </div>
@@ -141,25 +218,25 @@ export default function UserAbout() {
 
                       <div className="lg:col-span-2">
                         <div className="glass-card p-8 h-full">
-                          <h2 className="text-3xl font-bold gradient-text mb-8">
-                            My Story
-                          </h2>
+                          <EditableText
+                            value="My Story"
+                            onSave={(value) =>
+                              handleUpdateAbout("pageDescription", value)
+                            }
+                            className="text-3xl font-bold gradient-text mb-8"
+                            tag="h2"
+                            placeholder="Mi Historia"
+                          />
                           <div className="prose prose-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                            {about.biography
-                              .split("\n\n")
-                              .map((paragraph, index) => (
-                                <p
-                                  key={index}
-                                  className={
-                                    index ===
-                                    about.biography.split("\n\n").length - 1
-                                      ? "text-xl"
-                                      : "mb-6 text-xl"
-                                  }
-                                >
-                                  {paragraph}
-                                </p>
-                              ))}
+                            <EditableText
+                              value={about.biography}
+                              onSave={(value) =>
+                                handleUpdateAbout("biography", value)
+                              }
+                              className="text-xl leading-relaxed"
+                              tag="div"
+                              placeholder="Cuéntanos tu historia..."
+                            />
                           </div>
                         </div>
                       </div>
@@ -171,9 +248,15 @@ export default function UserAbout() {
                     style={{ animationDelay: "0.2s" }}
                   >
                     <div className="glass-card p-8">
-                      <h2 className="text-3xl font-bold gradient-text mb-8">
-                        Key Achievements
-                      </h2>
+                      <EditableText
+                        value="Key Achievements"
+                        onSave={(value) =>
+                          handleUpdateAbout("pageDescription", value)
+                        }
+                        className="text-3xl font-bold gradient-text mb-8"
+                        tag="h2"
+                        placeholder="Logros Clave"
+                      />
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {achievements.map((achievement) => (
                           <div
@@ -195,9 +278,15 @@ export default function UserAbout() {
                     style={{ animationDelay: "0.3s" }}
                   >
                     <div className="glass-card p-8">
-                      <h2 className="text-3xl font-bold gradient-text mb-8">
-                        Languages
-                      </h2>
+                      <EditableText
+                        value="Languages"
+                        onSave={(value) =>
+                          handleUpdateAbout("pageDescription", value)
+                        }
+                        className="text-3xl font-bold gradient-text mb-8"
+                        tag="h2"
+                        placeholder="Idiomas"
+                      />
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {languages.map((language) => (
                           <div
@@ -227,9 +316,15 @@ export default function UserAbout() {
                     style={{ animationDelay: "0.4s" }}
                   >
                     <div className="glass-card p-8">
-                      <h2 className="text-3xl font-bold gradient-text mb-12">
-                        Skills & Technologies
-                      </h2>
+                      <EditableText
+                        value="Skills & Technologies"
+                        onSave={(value) =>
+                          handleUpdateAbout("pageDescription", value)
+                        }
+                        className="text-3xl font-bold gradient-text mb-12"
+                        tag="h2"
+                        placeholder="Habilidades y Tecnologías"
+                      />
 
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         <div className="group">
@@ -243,7 +338,15 @@ export default function UserAbout() {
                                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
                               </svg>
                             </div>
-                            Languages
+                            <EditableText
+                              value="Languages"
+                              onSave={(value) =>
+                                handleUpdateAbout("pageDescription", value)
+                              }
+                              className="inline"
+                              tag="span"
+                              placeholder="Lenguajes"
+                            />
                           </h3>
                           <div className="flex flex-wrap gap-2">
                             {skills.languages.map((skill) => (
@@ -268,7 +371,15 @@ export default function UserAbout() {
                                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
                               </svg>
                             </div>
-                            Frontend
+                            <EditableText
+                              value="Frontend"
+                              onSave={(value) =>
+                                handleUpdateAbout("pageDescription", value)
+                              }
+                              className="inline"
+                              tag="span"
+                              placeholder="Frontend"
+                            />
                           </h3>
                           <div className="flex flex-wrap gap-2">
                             {skills.frontend.map((skill) => (
@@ -293,7 +404,15 @@ export default function UserAbout() {
                                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
                               </svg>
                             </div>
-                            Backend
+                            <EditableText
+                              value="Backend"
+                              onSave={(value) =>
+                                handleUpdateAbout("pageDescription", value)
+                              }
+                              className="inline"
+                              tag="span"
+                              placeholder="Backend"
+                            />
                           </h3>
                           <div className="flex flex-wrap gap-2">
                             {skills.backend.map((skill) => (
@@ -318,7 +437,15 @@ export default function UserAbout() {
                                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
                               </svg>
                             </div>
-                            Databases
+                            <EditableText
+                              value="Databases"
+                              onSave={(value) =>
+                                handleUpdateAbout("pageDescription", value)
+                              }
+                              className="inline"
+                              tag="span"
+                              placeholder="Bases de Datos"
+                            />
                           </h3>
                           <div className="flex flex-wrap gap-2">
                             {skills.databases.map((skill) => (
@@ -343,7 +470,15 @@ export default function UserAbout() {
                                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
                               </svg>
                             </div>
-                            DevOps & Tools
+                            <EditableText
+                              value="DevOps & Tools"
+                              onSave={(value) =>
+                                handleUpdateAbout("pageDescription", value)
+                              }
+                              className="inline"
+                              tag="span"
+                              placeholder="DevOps y Herramientas"
+                            />
                           </h3>
                           <div className="flex flex-wrap gap-2">
                             {skills.devops.map((skill) => (
@@ -368,7 +503,15 @@ export default function UserAbout() {
                                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
                               </svg>
                             </div>
-                            Integrations
+                            <EditableText
+                              value="Integrations"
+                              onSave={(value) =>
+                                handleUpdateAbout("pageDescription", value)
+                              }
+                              className="inline"
+                              tag="span"
+                              placeholder="Integraciones"
+                            />
                           </h3>
                           <div className="flex flex-wrap gap-2">
                             {skills.integrations.map((skill) => (
@@ -384,9 +527,15 @@ export default function UserAbout() {
                       </div>
 
                       <div className="mt-12">
-                        <h3 className="text-2xl font-bold gradient-text mb-6">
-                          Best Practices & Architecture
-                        </h3>
+                        <EditableText
+                          value="Best Practices & Architecture"
+                          onSave={(value) =>
+                            handleUpdateAbout("pageDescription", value)
+                          }
+                          className="text-2xl font-bold gradient-text mb-6"
+                          tag="h3"
+                          placeholder="Mejores Prácticas y Arquitectura"
+                        />
                         <div className="flex flex-wrap gap-3">
                           {skills.practices.map((skill) => (
                             <span
