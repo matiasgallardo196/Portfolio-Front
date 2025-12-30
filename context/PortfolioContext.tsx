@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { PortfolioData } from "../data/types";
 import { portfolioApi, ApiError } from "../services/api";
+import { themeData } from "../data/theme";
 
 // Context interface
 interface PortfolioContextType {
@@ -45,7 +46,11 @@ export const PortfolioProvider: React.FC<PortfolioProviderProps> = ({
       setHasApiError(false);
 
       const apiData = await portfolioApi.getPortfolio();
-      setPortfolio(apiData);
+      const completeData = {
+        ...apiData,
+        theme: apiData.theme || themeData,
+      };
+      setPortfolio(completeData);
     } catch (error) {
       console.error("Error loading portfolio from API:", error);
 

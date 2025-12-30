@@ -31,8 +31,8 @@ export const portfolioApi = {
         );
       }
 
-      const data = await response.json();
-      return data;
+      const responseBody = await response.json();
+      return responseBody.data || responseBody;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -64,8 +64,8 @@ export const portfolioApi = {
         );
       }
 
-      const data = await response.json();
-      return data;
+      const responseBody = await response.json();
+      return responseBody.data || responseBody;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -97,8 +97,8 @@ export const portfolioApi = {
         );
       }
 
-      const data = await response.json();
-      return data;
+      const responseBody = await response.json();
+      return responseBody.data || responseBody;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -134,8 +134,8 @@ export const portfolioApi = {
         );
       }
 
-      const data = await response.json();
-      return data;
+      const responseBody = await response.json();
+      return responseBody.data || responseBody;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -189,8 +189,8 @@ export const portfolioApi = {
         );
       }
 
-      const data = await response.json();
-      return data;
+      const responseBody = await response.json();
+      return responseBody.data || responseBody;
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
