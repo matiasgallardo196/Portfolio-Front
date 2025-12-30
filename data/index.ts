@@ -1,12 +1,3 @@
-// Re-export all data
-export { aboutData } from "./about";
-export { skillsData } from "./skills";
-export { achievementsData } from "./achievements";
-export { languagesData } from "./languages";
-export { projectsData } from "./projects";
-export { contactData } from "./contact";
-export { themeData } from "./theme";
-
 // Re-export types
 export type {
   About,
@@ -19,22 +10,8 @@ export type {
   PortfolioData,
 } from "./types";
 
-// Centralized portfolio data object
-import { PortfolioData } from "./types";
-import { aboutData } from "./about";
-import { skillsData } from "./skills";
-import { achievementsData } from "./achievements";
-import { languagesData } from "./languages";
-import { projectsData } from "./projects";
-import { contactData } from "./contact";
-import { themeData } from "./theme";
+// Re-export theme data
+export { themeData, type ThemeData } from "./theme";
 
-export const portfolioData = {
-  about: aboutData,
-  skills: skillsData,
-  achievements: achievementsData,
-  languages: languagesData,
-  projects: projectsData,
-  contact: contactData,
-  theme: themeData,
-};
+// Re-export UI constants (not data - data comes from API)
+export { projectsPageDescription, projectsCallToAction } from "./projects";
